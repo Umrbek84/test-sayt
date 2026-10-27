@@ -1,1 +1,455 @@
-<h1>Test subdomen muvaffaqiyatli ishga tushdi!</h1>
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Informatika Fanidan Onlayn Test</title>
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-hover: #1d4ed8;
+            --success: #16a34a;
+            --danger: #dc2626;
+            --bg: #f1f5f9;
+            --card: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background: var(--card);
+            border-radius: 16px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
+            padding: 30px;
+            overflow: hidden;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid var(--border);
+            padding-bottom: 16px;
+            margin-bottom: 24px;
+        }
+
+        .header h1 {
+            font-size: 20px;
+            font-weight: 700;
+            color: var(--primary);
+        }
+
+        .timer {
+            font-size: 16px;
+            font-weight: 600;
+            background: #eff6ff;
+            color: var(--primary);
+            padding: 6px 14px;
+            border-radius: 20px;
+            border: 1px solid #bfdbfe;
+        }
+
+        .question-number {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .question-text {
+            font-size: 18px;
+            font-weight: 600;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        .options-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-bottom: 28px;
+        }
+
+        .option-item {
+            display: flex;
+            align-items: center;
+            padding: 14px 18px;
+            background: #f8fafc;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .option-item:hover {
+            border-color: var(--primary);
+            background: #f0f7ff;
+        }
+
+        .option-item.selected {
+            border-color: var(--primary);
+            background: #eff6ff;
+            font-weight: 600;
+        }
+
+        .option-item input {
+            margin-right: 14px;
+            accent-color: var(--primary);
+            width: 18px;
+            height: 18px;
+        }
+
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .btn {
+            padding: 10px 22px;
+            border: none;
+            border-radius: 8px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .btn-prev {
+            background: #e2e8f0;
+            color: var(--text);
+        }
+
+        .btn-prev:hover:not(:disabled) {
+            background: #cbd5e1;
+        }
+
+        .btn-next {
+            background: var(--primary);
+            color: #ffffff;
+        }
+
+        .btn-next:hover {
+            background: var(--primary-hover);
+        }
+
+        .btn-finish {
+            background: var(--success);
+            color: #ffffff;
+        }
+
+        .btn-finish:hover {
+            background: #15803d;
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        /* Natijalar paneli */
+        .results-box {
+            display: none;
+        }
+
+        .score-summary {
+            text-align: center;
+            padding: 24px;
+            background: #f8fafc;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            border: 1px solid var(--border);
+        }
+
+        .score-summary h2 {
+            font-size: 26px;
+            margin-bottom: 8px;
+        }
+
+        .score-percentage {
+            font-size: 44px;
+            font-weight: 800;
+            color: var(--primary);
+            margin: 10px 0;
+        }
+
+        .review-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+
+        .review-item {
+            padding: 16px 20px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: #ffffff;
+        }
+
+        .review-item.correct {
+            border-left: 5px solid var(--success);
+        }
+
+        .review-item.wrong {
+            border-left: 5px solid var(--danger);
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .text-correct {
+            color: var(--success);
+        }
+
+        .text-wrong {
+            color: var(--danger);
+        }
+
+        .review-ans {
+            margin-top: 6px;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Test jarayoni -->
+    <div id="quiz-box">
+        <div class="header">
+            <h1>Informatika: 10 Savol</h1>
+            <div class="timer" id="timer">Vaqt: 10:00</div>
+        </div>
+
+        <div class="question-number" id="q-counter">Savol 1 / 10</div>
+        <div class="question-text" id="q-text">Savol matni yuklanmoqda...</div>
+
+        <div class="options-list" id="options-box"></div>
+
+        <div class="controls">
+            <button class="btn btn-prev" id="prev-btn" onclick="prevQuestion()" disabled>Orqaga</button>
+            <button class="btn btn-next" id="next-btn" onclick="nextQuestion()">Keyingisi</button>
+            <button class="btn btn-finish" id="finish-btn" onclick="finishQuiz()" style="display: none;">Testni yakunlash</button>
+        </div>
+    </div>
+
+    <!-- Tahlil va Natijalar -->
+    <div id="results-box" class="results-box">
+        <div class="score-summary">
+            <h2>Sinov Natijasi</h2>
+            <div class="score-percentage" id="score-percent">0%</div>
+            <p id="score-details" style="color: var(--text-light); font-size: 16px;">10 ta savoldan 0 tasiga to'g'ri javob berildi.</p>
+        </div>
+
+        <h3 style="margin-bottom: 15px;">Xatolar tahlili va javoblar:</h3>
+        <div class="review-list" id="review-box"></div>
+
+        <button class="btn btn-next" style="width: 100%; padding: 14px;" onclick="restartQuiz()">Qayta urinish</button>
+    </div>
+</div>
+
+<script>
+    const questions = [
+        {
+            q: "1 bayt necha bitga teng?",
+            options: ["4 bit", "8 bit", "16 bit", "1024 bit"],
+            answer: 1
+        },
+        {
+            q: "Kompyuterning asosiy hisoblash mantiqiy yuragi qaysi qurilma?",
+            options: ["Operativ xotira (RAM)", "Markaziy protsessor (CPU)", "Qattiq disk (HDD/SSD)", "Videokarta (GPU)"],
+            answer: 1
+        },
+        {
+            q: "HTML nimaning qisqartmasi hisoblanadi?",
+            options: ["Hyper Text Markup Language", "High Text Making Language", "Hyperlinks and Text Management Language", "Home Tool Markup Language"],
+            answer: 0
+        },
+        {
+            q: "Quyidagilardan qaysi biri operatsion tizim emas?",
+            options: ["Linux", "Windows 11", "Python", "macOS"],
+            answer: 2
+        },
+        {
+            q: "1 Kilobayt (KB) necha Baytga teng?",
+            options: ["1000 Bayt", "1024 Bayt", "512 Bayt", "2048 Bayt"],
+            answer: 1
+        },
+        {
+            q: "Axborot xavfsizligida veb-saytlarning shifrlangan xavfsiz ulanish protokoli qaysi?",
+            options: ["HTTP", "FTP", "HTTPS", "SMTP"],
+            answer: 2
+        },
+        {
+            q: "Dasturlashda o'zgaruvchining qiymatini takrorlash uchun qaysi strukturadan foydalaniladi?",
+            options: ["Sikl (Loop)", "Shart operatori (If/Else)", "Klass (Class)", "Massiv (Array)"],
+            answer: 0
+        },
+        {
+            q: "IP manzillarni domen nomlariga aylantirib beruvchi tarmoq xizmati qaysi?",
+            options: ["DHCP", "DNS", "TCP/IP", "VPN"],
+            answer: 1
+        },
+        {
+            q: "Quyidagilardan qaysi biri doimiy xotira (elektr o'chsa ham ma'lumot saqlanadi)?",
+            options: ["RAM", "Kesh xotira", "Registrlar", "ROM / SSD"],
+            answer: 3
+        },
+        {
+            q: "Fayl kengaytmasi '.py' bo'lgan fayl qaysi tilda yozilgan dastur hisoblanadi?",
+            options: ["Pascal", "Python", "PHP", "Perl"],
+            answer: 1
+        }
+    ];
+
+    let currentQuestion = 0;
+    let userAnswers = new Array(questions.length).fill(null);
+    let timeLeft = 600; // 10 daqiqa (sekundlarda)
+    let timerInterval = null;
+
+    function startTimer() {
+        clearInterval(timerInterval);
+        timerInterval = setInterval(() => {
+            if (timeLeft <= 0) {
+                clearInterval(timerInterval);
+                finishQuiz();
+                return;
+            }
+            timeLeft--;
+            const min = Math.floor(timeLeft / 60);
+            const sec = timeLeft % 60;
+            document.getElementById('timer').textContent = `Vaqt: ${min}:${sec < 10 ? '0' : ''}${sec}`;
+        }, 1000);
+    }
+
+    function renderQuestion() {
+        const q = questions[currentQuestion];
+        document.getElementById('q-counter').textContent = `Savol ${currentQuestion + 1} / ${questions.length}`;
+        document.getElementById('q-text').textContent = q.q;
+
+        const optionsBox = document.getElementById('options-box');
+        optionsBox.innerHTML = '';
+
+        q.options.forEach((opt, idx) => {
+            const isSelected = userAnswers[currentQuestion] === idx;
+            const optDiv = document.createElement('label');
+            optDiv.className = `option-item ${isSelected ? 'selected' : ''}`;
+            optDiv.innerHTML = `
+                <input type="radio" name="opt" value="${idx}" ${isSelected ? 'checked' : ''} onchange="selectOption(${idx})">
+                <span>${opt}</span>
+            `;
+            optionsBox.appendChild(optDiv);
+        });
+
+        // Tugmalar holati
+        document.getElementById('prev-btn').disabled = (currentQuestion === 0);
+        
+        if (currentQuestion === questions.length - 1) {
+            document.getElementById('next-btn').style.display = 'none';
+            document.getElementById('finish-btn').style.display = 'inline-block';
+        } else {
+            document.getElementById('next-btn').style.display = 'inline-block';
+            document.getElementById('finish-btn').style.display = 'none';
+        }
+    }
+
+    function selectOption(index) {
+        userAnswers[currentQuestion] = index;
+        renderQuestion();
+    }
+
+    function nextQuestion() {
+        if (currentQuestion < questions.length - 1) {
+            currentQuestion++;
+            renderQuestion();
+        }
+    }
+
+    function prevQuestion() {
+        if (currentQuestion > 0) {
+            currentQuestion--;
+            renderQuestion();
+        }
+    }
+
+    function finishQuiz() {
+        clearInterval(timerInterval);
+        document.getElementById('quiz-box').style.display = 'none';
+        document.getElementById('results-box').style.display = 'block';
+
+        let correctCount = 0;
+        const reviewBox = document.getElementById('review-box');
+        reviewBox.innerHTML = '';
+
+        questions.forEach((q, idx) => {
+            const userAns = userAnswers[idx];
+            const isCorrect = (userAns === q.answer);
+            if (isCorrect) correctCount++;
+
+            const item = document.createElement('div');
+            item.className = `review-item ${isCorrect ? 'correct' : 'wrong'}`;
+            
+            const userText = userAns !== null ? q.options[userAns] : "Javob berilmagan";
+            const correctText = q.options[q.answer];
+
+            item.innerHTML = `
+                <div class="review-header">
+                    <span>${idx + 1}-savol: ${q.q}</span>
+                    <span class="${isCorrect ? 'text-correct' : 'text-wrong'}">${isCorrect ? '✔ To‘g‘ri' : '✖ Noto‘g‘ri'}</span>
+                </div>
+                <div class="review-ans"><strong>Sizning javobingiz:</strong> <span class="${isCorrect ? 'text-correct' : 'text-wrong'}">${userText}</span></div>
+                ${!isCorrect ? `<div class="review-ans"><strong>To'g'ri javob:</strong> <span class="text-correct">${correctText}</span></div>` : ''}
+            `;
+            reviewBox.appendChild(item);
+        });
+
+        const percent = Math.round((correctCount / questions.length) * 100);
+        document.getElementById('score-percent').textContent = `${percent}%`;
+        document.getElementById('score-details').textContent = `${questions.length} ta savoldan ${correctCount} tasiga to'g'ri javob berildi.`;
+    }
+
+    function restartQuiz() {
+        currentQuestion = 0;
+        userAnswers = new Array(questions.length).fill(null);
+        timeLeft = 600;
+        document.getElementById('results-box').style.display = 'none';
+        document.getElementById('quiz-box').style.display = 'block';
+        startTimer();
+        renderQuestion();
+    }
+
+    // Dastlabki ishga tushirish
+    startTimer();
+    renderQuestion();
+</script>
+
+</body>
+</html>
