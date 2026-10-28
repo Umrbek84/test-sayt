@@ -1,455 +1,225 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Informatika Fanidan Onlayn Test</title>
-    <style>
-        :root {
-            --primary: #2563eb;
-            --primary-hover: #1d4ed8;
-            --success: #16a34a;
-            --danger: #dc2626;
-            --bg: #f1f5f9;
-            --card: #ffffff;
-            --text: #1e293b;
-            --text-light: #64748b;
-            --border: #e2e8f0;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Olimpiada tayyorgarligi | Qoʻshkoʻpir</title>
+<meta name="description" content="Qoʻshkoʻpir tumani olimpiada gʻoliblari uchun viloyat bosqichiga tayyorgarlik sinov testlari.">
+<style>
+:root{
+  --ink:#1b1740; --ink-2:#4a4670; --bg:#f6f4fb; --card:#ffffff; --line:#e6e2f3;
+  --brand:#5b34c9; --brand-2:#7c5ce6; --gold:#f2b134; --ok:#17a673;
+  --shadow:0 10px 30px -12px rgba(52,28,120,.28);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Segoe UI',Roboto,Helvetica,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.55}
+a{color:inherit}
+.wrap{max-width:1120px;margin:0 auto;padding:0 20px}
 
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
-        }
+/* header */
+header{position:sticky;top:0;z-index:20;background:rgba(246,244,251,.88);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between;height:64px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:15px;text-decoration:none}
+.logo{width:34px;height:34px;border-radius:10px;background:linear-gradient(135deg,var(--brand),var(--brand-2));display:grid;place-items:center;color:#fff;font-size:18px}
+.nav a.link{font-size:14px;color:var(--ink-2);text-decoration:none;margin-left:22px}
+.nav a.link:hover{color:var(--brand)}
+@media(max-width:640px){.nav .links{display:none}}
 
-        body {
-            background-color: var(--bg);
-            color: var(--text);
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 20px;
-        }
+/* hero */
+.hero{position:relative;overflow:hidden;background:radial-gradient(1200px 500px at 85% -10%,#8d6df0 0,transparent 60%),linear-gradient(160deg,#2a1670,#4a27b0 60%,#5b34c9);color:#fff}
+.hero::after{content:"";position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.09) 1px,transparent 1px);background-size:22px 22px;mask-image:linear-gradient(to bottom,#000,transparent 85%);pointer-events:none}
+.hero .wrap{position:relative;z-index:1;padding-top:76px;padding-bottom:92px;display:grid;grid-template-columns:1.25fr .75fr;gap:40px;align-items:center}
+.eyebrow{display:inline-block;font-size:13px;letter-spacing:.04em;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.22);padding:6px 14px;border-radius:99px;margin-bottom:20px}
+h1{font-family:Georgia,'Times New Roman',serif;font-size:clamp(32px,5vw,54px);line-height:1.1;font-weight:700;margin-bottom:18px}
+h1 span{color:var(--gold)}
+.hero p.lead{font-size:18px;color:#e4dcff;max-width:560px;margin-bottom:30px}
+.btn{display:inline-flex;align-items:center;gap:10px;border:0;cursor:pointer;font:inherit;font-weight:700;font-size:17px;padding:16px 30px;border-radius:14px;text-decoration:none;transition:.2s}
+.btn-gold{background:var(--gold);color:#2a1670;box-shadow:0 10px 24px -8px rgba(242,177,52,.7)}
+.btn-gold:hover{transform:translateY(-2px);background:#ffc04d}
+.btn-ghost{background:rgba(255,255,255,.12);color:#fff;border:1px solid rgba(255,255,255,.3);margin-left:10px;font-size:15px;padding:15px 22px}
+.btn-ghost:hover{background:rgba(255,255,255,.2)}
+@media(max-width:480px){.btn-ghost{margin:12px 0 0}}
 
-        .container {
-            width: 100%;
-            max-width: 800px;
-            background: var(--card);
-            border-radius: 16px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.08);
-            padding: 30px;
-            overflow: hidden;
-        }
+.panel{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.2);border-radius:20px;padding:26px;backdrop-filter:blur(6px)}
+.panel h3{font-size:14px;font-weight:600;color:#d9ceff;margin-bottom:14px;letter-spacing:.04em;text-transform:uppercase}
+.stat{display:flex;justify-content:space-between;align-items:baseline;padding:12px 0;border-top:1px solid rgba(255,255,255,.16)}
+.stat:first-of-type{border-top:0}
+.stat b{font-family:Georgia,serif;font-size:30px}
+.stat span{color:#d9ceff;font-size:14px}
+@media(max-width:860px){.hero .wrap{grid-template-columns:1fr;padding-top:56px;padding-bottom:64px}}
 
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid var(--border);
-            padding-bottom: 16px;
-            margin-bottom: 24px;
-        }
+/* sections */
+section{padding:72px 0}
+.sec-head{margin-bottom:34px;max-width:620px}
+.sec-head h2{font-family:Georgia,serif;font-size:clamp(26px,3.4vw,36px);margin-bottom:8px}
+.sec-head p{color:var(--ink-2)}
 
-        .header h1 {
-            font-size: 20px;
-            font-weight: 700;
-            color: var(--primary);
-        }
+.subjects{display:grid;grid-template-columns:repeat(5,1fr);gap:16px}
+.sub{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 18px;text-align:center;box-shadow:var(--shadow);transition:.2s}
+.sub:hover{transform:translateY(-4px);border-color:var(--brand-2)}
+.sub .ic{width:56px;height:56px;border-radius:16px;margin:0 auto 14px;display:grid;place-items:center;font-size:28px;color:#fff}
+.sub h4{font-size:17px;margin-bottom:4px}
+.sub p{font-size:13px;color:var(--ink-2)}
+@media(max-width:960px){.subjects{grid-template-columns:repeat(3,1fr)}}
+@media(max-width:560px){.subjects{grid-template-columns:repeat(2,1fr)}}
 
-        .timer {
-            font-size: 16px;
-            font-weight: 600;
-            background: #eff6ff;
-            color: var(--primary);
-            padding: 6px 14px;
-            border-radius: 20px;
-            border: 1px solid #bfdbfe;
-        }
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:s}
+.step{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:24px;position:relative}
+.step::before{counter-increment:s;content:counter(s);display:grid;place-items:center;width:38px;height:38px;border-radius:50%;background:var(--brand);color:#fff;font-weight:700;margin-bottom:14px}
+.step h4{margin-bottom:6px}
+.step p{font-size:14px;color:var(--ink-2)}
+@media(max-width:960px){.steps{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.steps{grid-template-columns:1fr}}
 
-        .question-number {
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-        }
+.rules{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:28px;display:grid;grid-template-columns:repeat(3,1fr);gap:24px;box-shadow:var(--shadow)}
+.rules div b{display:block;font-family:Georgia,serif;font-size:28px;color:var(--brand)}
+.rules div span{font-size:14px;color:var(--ink-2)}
+@media(max-width:640px){.rules{grid-template-columns:1fr}}
 
-        .question-text {
-            font-size: 18px;
-            font-weight: 600;
-            line-height: 1.5;
-            margin-bottom: 20px;
-        }
+.cta{background:linear-gradient(135deg,#2a1670,#5b34c9);color:#fff;border-radius:26px;padding:48px 28px;text-align:center}
+.cta h2{font-family:Georgia,serif;font-size:clamp(24px,3.4vw,34px);margin-bottom:10px}
+.cta p{color:#e4dcff;margin-bottom:24px}
 
-        .options-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-bottom: 28px;
-        }
+footer{padding:34px 0 44px;text-align:center;font-size:13px;color:var(--ink-2);border-top:1px solid var(--line)}
 
-        .option-item {
-            display: flex;
-            align-items: center;
-            padding: 14px 18px;
-            background: #f8fafc;
-            border: 1.5px solid var(--border);
-            border-radius: 10px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .option-item:hover {
-            border-color: var(--primary);
-            background: #f0f7ff;
-        }
-
-        .option-item.selected {
-            border-color: var(--primary);
-            background: #eff6ff;
-            font-weight: 600;
-        }
-
-        .option-item input {
-            margin-right: 14px;
-            accent-color: var(--primary);
-            width: 18px;
-            height: 18px;
-        }
-
-        .controls {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .btn {
-            padding: 10px 22px;
-            border: none;
-            border-radius: 8px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .btn-prev {
-            background: #e2e8f0;
-            color: var(--text);
-        }
-
-        .btn-prev:hover:not(:disabled) {
-            background: #cbd5e1;
-        }
-
-        .btn-next {
-            background: var(--primary);
-            color: #ffffff;
-        }
-
-        .btn-next:hover {
-            background: var(--primary-hover);
-        }
-
-        .btn-finish {
-            background: var(--success);
-            color: #ffffff;
-        }
-
-        .btn-finish:hover {
-            background: #15803d;
-        }
-
-        .btn:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
-
-        /* Natijalar paneli */
-        .results-box {
-            display: none;
-        }
-
-        .score-summary {
-            text-align: center;
-            padding: 24px;
-            background: #f8fafc;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            border: 1px solid var(--border);
-        }
-
-        .score-summary h2 {
-            font-size: 26px;
-            margin-bottom: 8px;
-        }
-
-        .score-percentage {
-            font-size: 44px;
-            font-weight: 800;
-            color: var(--primary);
-            margin: 10px 0;
-        }
-
-        .review-list {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            margin-bottom: 25px;
-        }
-
-        .review-item {
-            padding: 16px 20px;
-            border-radius: 10px;
-            border: 1px solid var(--border);
-            background: #ffffff;
-        }
-
-        .review-item.correct {
-            border-left: 5px solid var(--success);
-        }
-
-        .review-item.wrong {
-            border-left: 5px solid var(--danger);
-        }
-
-        .review-header {
-            display: flex;
-            justify-content: space-between;
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 8px;
-        }
-
-        .text-correct {
-            color: var(--success);
-        }
-
-        .text-wrong {
-            color: var(--danger);
-        }
-
-        .review-ans {
-            margin-top: 6px;
-            font-size: 14px;
-        }
-    </style>
+/* test overlay */
+#overlay{position:fixed;inset:0;z-index:100;background:#f0f2f5;display:none;flex-direction:column}
+#overlay.open{display:flex}
+#bar{height:52px;flex:0 0 52px;background:#2a1670;color:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 14px;gap:10px}
+#bar b{font-size:14px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#bar .acts{display:flex;gap:8px;flex:none}
+#bar button,#bar a{font:inherit;font-size:13px;font-weight:600;color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.28);padding:7px 13px;border-radius:9px;cursor:pointer;text-decoration:none}
+#bar button:hover,#bar a:hover{background:rgba(255,255,255,.26)}
+#frameBox{position:relative;flex:1}
+#frame{position:absolute;inset:0;width:100%;height:100%;border:0;background:#f0f2f5}
+#loading{position:absolute;inset:0;display:grid;place-items:center;color:var(--ink-2);font-size:15px;pointer-events:none}
+.spin{width:38px;height:38px;border:4px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:r 1s linear infinite;margin:0 auto 12px}
+@keyframes r{to{transform:rotate(360deg)}}
+</style>
 </head>
 <body>
 
-<div class="container">
-    <!-- Test jarayoni -->
-    <div id="quiz-box">
-        <div class="header">
-            <h1>Informatika: 10 Savol</h1>
-            <div class="timer" id="timer">Vaqt: 10:00</div>
-        </div>
-
-        <div class="question-number" id="q-counter">Savol 1 / 10</div>
-        <div class="question-text" id="q-text">Savol matni yuklanmoqda...</div>
-
-        <div class="options-list" id="options-box"></div>
-
-        <div class="controls">
-            <button class="btn btn-prev" id="prev-btn" onclick="prevQuestion()" disabled>Orqaga</button>
-            <button class="btn btn-next" id="next-btn" onclick="nextQuestion()">Keyingisi</button>
-            <button class="btn btn-finish" id="finish-btn" onclick="finishQuiz()" style="display: none;">Testni yakunlash</button>
-        </div>
+<header>
+  <div class="wrap nav">
+    <a class="brand" href="#"><span class="logo">★</span><span>Qoʻshkoʻpir | Olimpiada</span></a>
+    <div class="links">
+      <a class="link" href="#fanlar">Fanlar</a>
+      <a class="link" href="#tartib">Tartib</a>
+      <a class="link" href="#qoidalar">Qoidalar</a>
     </div>
+  </div>
+</header>
 
-    <!-- Tahlil va Natijalar -->
-    <div id="results-box" class="results-box">
-        <div class="score-summary">
-            <h2>Sinov Natijasi</h2>
-            <div class="score-percentage" id="score-percent">0%</div>
-            <p id="score-details" style="color: var(--text-light); font-size: 16px;">10 ta savoldan 0 tasiga to'g'ri javob berildi.</p>
-        </div>
-
-        <h3 style="margin-bottom: 15px;">Xatolar tahlili va javoblar:</h3>
-        <div class="review-list" id="review-box"></div>
-
-        <button class="btn btn-next" style="width: 100%; padding: 14px;" onclick="restartQuiz()">Qayta urinish</button>
+<div class="hero">
+  <div class="wrap">
+    <div>
+      <span class="eyebrow">Tuman bosqichi gʻoliblari uchun</span>
+      <h1>Viloyat bosqichiga <span>tayyorgarlik</span> sinov testi</h1>
+      <p class="lead">Matematika, Kimyo, Biologiya, Fizika va Informatika fanlaridan 9, 10 va 11-sinflar uchun 30 tadan savol. Natija darhol chiqadi va xatolar tahlil qilinadi.</p>
+      <button class="btn btn-gold" onclick="openTest()">Testni boshlash →</button>
+      <a class="btn btn-ghost" href="#tartib">Qanday ishlaydi?</a>
     </div>
+    <div class="panel">
+      <h3>Qisqacha</h3>
+      <div class="stat"><b>5</b><span>fan</span></div>
+      <div class="stat"><b>3</b><span>sinf: 9, 10, 11</span></div>
+      <div class="stat"><b>30</b><span>ta savol, 30 ball</span></div>
+      <div class="stat"><b>90</b><span>daqiqa</span></div>
+    </div>
+  </div>
+</div>
+
+<section id="fanlar">
+  <div class="wrap">
+    <div class="sec-head"><h2>Fanlar</h2><p>Har bir fan va sinf uchun alohida test tayyorlangan.</p></div>
+    <div class="subjects">
+      <div class="sub"><div class="ic" style="background:#5b34c9">∑</div><h4>Matematika</h4><p>9, 10, 11-sinf</p></div>
+      <div class="sub"><div class="ic" style="background:#17a673">⚗</div><h4>Kimyo</h4><p>9, 10, 11-sinf</p></div>
+      <div class="sub"><div class="ic" style="background:#e0662f">❀</div><h4>Biologiya</h4><p>9, 10, 11-sinf</p></div>
+      <div class="sub"><div class="ic" style="background:#2b86d9">⚛</div><h4>Fizika</h4><p>9, 10, 11-sinf</p></div>
+      <div class="sub"><div class="ic" style="background:#c0397a">{ }</div><h4>Informatika</h4><p>9, 10, 11-sinf</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="tartib" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><h2>Test qanday oʻtadi</h2><p>Toʻrt oddiy qadam.</p></div>
+    <div class="steps">
+      <div class="step"><h4>Fan va sinf</h4><p>Roʻyxatdan oʻz fanini va sinfini tanlang.</p></div>
+      <div class="step"><h4>Oʻquvchi</h4><p>Gʻoliblar roʻyxatidan oʻz ismingizni tanlang. Maktab oʻzi chiqadi.</p></div>
+      <div class="step"><h4>PIN-kod</h4><p>Ustozingiz bergan PIN-kodni kiriting.</p></div>
+      <div class="step"><h4>Natija</h4><p>Testni yakunlang, ball va xatolar tahlilini koʻring.</p></div>
+    </div>
+  </div>
+</section>
+
+<section id="qoidalar" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><h2>Qoidalar</h2></div>
+    <div class="rules">
+      <div><b>0,8 / 1 / 1,2</b><span>1–10, 11–20 va 21–30-savollar uchun ballar</span></div>
+      <div><b>90 daqiqa</b><span>vaqt tugasa test avtomatik yakunlanadi</span></div>
+      <div><b>Nazorat</b><span>boshqa oynaga oʻtish soni natijada qayd etiladi</span></div>
+    </div>
+  </div>
+</section>
+
+<section style="padding-top:0">
+  <div class="wrap">
+    <div class="cta">
+      <h2>Tayyormisiz?</h2>
+      <p>PIN-kodni tayyorlab qoʻying va testni boshlang.</p>
+      <button class="btn btn-gold" onclick="openTest()">Testni boshlash →</button>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">Qoʻshkoʻpir tumani Maktabgacha va maktab taʼlimi boʻlimi · Oʻquvchilar bilimini baholash, tahlil qilish va pedagoglarni kasbiy rivojlantirishni muvofiqlashtirish shoʻbasi</div>
+</footer>
+
+<!-- Test oynasi -->
+<div id="overlay" role="dialog" aria-label="Test">
+  <div id="bar">
+    <b>Olimpiada tayyorgarligi — test</b>
+    <div class="acts">
+      <a id="ext" href="#" target="_blank" rel="noopener">Alohida oynada</a>
+      <button onclick="closeTest()">Yopish ✕</button>
+    </div>
+  </div>
+  <div id="frameBox">
+    <div id="loading"><div><div class="spin"></div>Test yuklanmoqda...</div></div>
+    <iframe id="frame" title="Test" allow="fullscreen"></iframe>
+  </div>
 </div>
 
 <script>
-    const questions = [
-        {
-            q: "1 bayt necha bitga teng?",
-            options: ["4 bit", "8 bit", "16 bit", "1024 bit"],
-            answer: 1
-        },
-        {
-            q: "Kompyuterning asosiy hisoblash mantiqiy yuragi qaysi qurilma?",
-            options: ["Operativ xotira (RAM)", "Markaziy protsessor (CPU)", "Qattiq disk (HDD/SSD)", "Videokarta (GPU)"],
-            answer: 1
-        },
-        {
-            q: "HTML nimaning qisqartmasi hisoblanadi?",
-            options: ["Hyper Text Markup Language", "High Text Making Language", "Hyperlinks and Text Management Language", "Home Tool Markup Language"],
-            answer: 0
-        },
-        {
-            q: "Quyidagilardan qaysi biri operatsion tizim emas?",
-            options: ["Linux", "Windows 11", "Python", "macOS"],
-            answer: 2
-        },
-        {
-            q: "1 Kilobayt (KB) necha Baytga teng?",
-            options: ["1000 Bayt", "1024 Bayt", "512 Bayt", "2048 Bayt"],
-            answer: 1
-        },
-        {
-            q: "Axborot xavfsizligida veb-saytlarning shifrlangan xavfsiz ulanish protokoli qaysi?",
-            options: ["HTTP", "FTP", "HTTPS", "SMTP"],
-            answer: 2
-        },
-        {
-            q: "Dasturlashda o'zgaruvchining qiymatini takrorlash uchun qaysi strukturadan foydalaniladi?",
-            options: ["Sikl (Loop)", "Shart operatori (If/Else)", "Klass (Class)", "Massiv (Array)"],
-            answer: 0
-        },
-        {
-            q: "IP manzillarni domen nomlariga aylantirib beruvchi tarmoq xizmati qaysi?",
-            options: ["DHCP", "DNS", "TCP/IP", "VPN"],
-            answer: 1
-        },
-        {
-            q: "Quyidagilardan qaysi biri doimiy xotira (elektr o'chsa ham ma'lumot saqlanadi)?",
-            options: ["RAM", "Kesh xotira", "Registrlar", "ROM / SSD"],
-            answer: 3
-        },
-        {
-            q: "Fayl kengaytmasi '.py' bo'lgan fayl qaysi tilda yozilgan dastur hisoblanadi?",
-            options: ["Pascal", "Python", "PHP", "Perl"],
-            answer: 1
-        }
-    ];
+  // Apps Script web-ilova manzili
+  const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7n-9vwmDvaFofqh8qddAW0aYEAs-i2uh1sDYJoIx1tCuupQel03SLXBa4W8G_zoOerw/exec';
 
-    let currentQuestion = 0;
-    let userAnswers = new Array(questions.length).fill(null);
-    let timeLeft = 600; // 10 daqiqa (sekundlarda)
-    let timerInterval = null;
+  const overlay = document.getElementById('overlay');
+  const frame = document.getElementById('frame');
+  const loading = document.getElementById('loading');
+  document.getElementById('ext').href = SCRIPT_URL;
 
-    function startTimer() {
-        clearInterval(timerInterval);
-        timerInterval = setInterval(() => {
-            if (timeLeft <= 0) {
-                clearInterval(timerInterval);
-                finishQuiz();
-                return;
-            }
-            timeLeft--;
-            const min = Math.floor(timeLeft / 60);
-            const sec = timeLeft % 60;
-            document.getElementById('timer').textContent = `Vaqt: ${min}:${sec < 10 ? '0' : ''}${sec}`;
-        }, 1000);
+  function openTest() {
+    if (!frame.getAttribute('src')) {
+      loading.style.display = 'grid';
+      frame.onload = () => { loading.style.display = 'none'; };
+      frame.src = SCRIPT_URL;
     }
-
-    function renderQuestion() {
-        const q = questions[currentQuestion];
-        document.getElementById('q-counter').textContent = `Savol ${currentQuestion + 1} / ${questions.length}`;
-        document.getElementById('q-text').textContent = q.q;
-
-        const optionsBox = document.getElementById('options-box');
-        optionsBox.innerHTML = '';
-
-        q.options.forEach((opt, idx) => {
-            const isSelected = userAnswers[currentQuestion] === idx;
-            const optDiv = document.createElement('label');
-            optDiv.className = `option-item ${isSelected ? 'selected' : ''}`;
-            optDiv.innerHTML = `
-                <input type="radio" name="opt" value="${idx}" ${isSelected ? 'checked' : ''} onchange="selectOption(${idx})">
-                <span>${opt}</span>
-            `;
-            optionsBox.appendChild(optDiv);
-        });
-
-        // Tugmalar holati
-        document.getElementById('prev-btn').disabled = (currentQuestion === 0);
-        
-        if (currentQuestion === questions.length - 1) {
-            document.getElementById('next-btn').style.display = 'none';
-            document.getElementById('finish-btn').style.display = 'inline-block';
-        } else {
-            document.getElementById('next-btn').style.display = 'inline-block';
-            document.getElementById('finish-btn').style.display = 'none';
-        }
-    }
-
-    function selectOption(index) {
-        userAnswers[currentQuestion] = index;
-        renderQuestion();
-    }
-
-    function nextQuestion() {
-        if (currentQuestion < questions.length - 1) {
-            currentQuestion++;
-            renderQuestion();
-        }
-    }
-
-    function prevQuestion() {
-        if (currentQuestion > 0) {
-            currentQuestion--;
-            renderQuestion();
-        }
-    }
-
-    function finishQuiz() {
-        clearInterval(timerInterval);
-        document.getElementById('quiz-box').style.display = 'none';
-        document.getElementById('results-box').style.display = 'block';
-
-        let correctCount = 0;
-        const reviewBox = document.getElementById('review-box');
-        reviewBox.innerHTML = '';
-
-        questions.forEach((q, idx) => {
-            const userAns = userAnswers[idx];
-            const isCorrect = (userAns === q.answer);
-            if (isCorrect) correctCount++;
-
-            const item = document.createElement('div');
-            item.className = `review-item ${isCorrect ? 'correct' : 'wrong'}`;
-            
-            const userText = userAns !== null ? q.options[userAns] : "Javob berilmagan";
-            const correctText = q.options[q.answer];
-
-            item.innerHTML = `
-                <div class="review-header">
-                    <span>${idx + 1}-savol: ${q.q}</span>
-                    <span class="${isCorrect ? 'text-correct' : 'text-wrong'}">${isCorrect ? '✔ To‘g‘ri' : '✖ Noto‘g‘ri'}</span>
-                </div>
-                <div class="review-ans"><strong>Sizning javobingiz:</strong> <span class="${isCorrect ? 'text-correct' : 'text-wrong'}">${userText}</span></div>
-                ${!isCorrect ? `<div class="review-ans"><strong>To'g'ri javob:</strong> <span class="text-correct">${correctText}</span></div>` : ''}
-            `;
-            reviewBox.appendChild(item);
-        });
-
-        const percent = Math.round((correctCount / questions.length) * 100);
-        document.getElementById('score-percent').textContent = `${percent}%`;
-        document.getElementById('score-details').textContent = `${questions.length} ta savoldan ${correctCount} tasiga to'g'ri javob berildi.`;
-    }
-
-    function restartQuiz() {
-        currentQuestion = 0;
-        userAnswers = new Array(questions.length).fill(null);
-        timeLeft = 600;
-        document.getElementById('results-box').style.display = 'none';
-        document.getElementById('quiz-box').style.display = 'block';
-        startTimer();
-        renderQuestion();
-    }
-
-    // Dastlabki ishga tushirish
-    startTimer();
-    renderQuestion();
+    overlay.classList.add('open');
+    document.body.style.overflow = 'hidden';
+  }
+  function closeTest() {
+    if (frame.getAttribute('src') && !confirm('Oynani yopsangiz, boshlangan test yoʻqoladi. Yopilsinmi?')) return;
+    frame.removeAttribute('src');
+    overlay.classList.remove('open');
+    document.body.style.overflow = '';
+  }
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && overlay.classList.contains('open')) closeTest(); });
 </script>
-
 </body>
 </html>
