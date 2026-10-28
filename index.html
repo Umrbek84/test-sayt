@@ -81,7 +81,19 @@ section{padding:72px 0}
 .cta h2{font-family:Georgia,serif;font-size:clamp(24px,3.4vw,34px);margin-bottom:10px}
 .cta p{color:#e4dcff;margin-bottom:24px}
 
-footer{padding:34px 0 44px;text-align:center;font-size:13px;color:var(--ink-2);border-top:1px solid var(--line)}
+footer{background:#0f1729;color:#cfd6e6;padding:46px 0 30px;margin-top:20px}
+.f-top{display:flex;align-items:center;gap:16px;margin-bottom:16px}
+.f-logo{width:84px;height:84px;flex:none;border-radius:50%;border:3px solid var(--gold);background:radial-gradient(circle,#1d2542,#0b1020);color:var(--gold);display:grid;place-items:center;font-family:Georgia,serif;font-size:30px;font-weight:700;letter-spacing:1px;box-shadow:0 0 18px rgba(242,177,52,.35)}
+.f-name{font-family:Georgia,serif;font-size:24px;font-weight:700;color:#fff}
+.f-role{font-size:13px;font-weight:700;letter-spacing:.08em;color:#fff;margin-top:2px}
+.f-slogan{font-family:Georgia,serif;font-style:italic;font-size:14px;color:#cfd6e6}
+.f-desc{max-width:520px;font-size:15px;margin-bottom:24px}
+footer h5{font-family:Georgia,serif;font-size:16px;color:#fff;margin-bottom:12px}
+.f-links{display:flex;flex-wrap:wrap;gap:12px}
+.f-links a{display:inline-flex;align-items:center;gap:9px;color:#fff;text-decoration:none;font-family:Georgia,serif;font-weight:700;font-size:14px;border:1px solid #38425e;border-radius:12px;padding:12px 16px;transition:.2s}
+.f-links a:hover{border-color:var(--gold);background:rgba(242,177,52,.1)}
+.f-links svg{width:18px;height:18px;fill:#fff;flex:none}
+.f-copy{margin-top:30px;padding-top:20px;border-top:1px solid #222c47;text-align:center;font-size:13px}
 
 /* test overlay */
 #overlay{position:fixed;inset:0;z-index:100;background:#f0f2f5;display:none;flex-direction:column}
@@ -177,7 +189,26 @@ footer{padding:34px 0 44px;text-align:center;font-size:13px;color:var(--ink-2);b
 </section>
 
 <footer>
-  <div class="wrap">Qoʻshkoʻpir tumani Maktabgacha va maktab taʼlimi boʻlimi · Oʻquvchilar bilimini baholash, tahlil qilish va pedagoglarni kasbiy rivojlantirishni muvofiqlashtirish shoʻbasi</div>
+  <div class="wrap">
+    <div class="f-top">
+      <div class="f-logo">UM</div>
+      <div>
+        <div class="f-name">Umrbek Mamatov</div>
+        <div class="f-role">BOSH METODIST</div>
+        <div class="f-slogan">Taʼlim sifati — kelajak kafolati</div>
+      </div>
+    </div>
+    <p class="f-desc">Qoʻshkoʻpir tumani maktabgacha va maktab taʼlimi yoʻnalishidagi rasmiy monitoring va axborot portali.</p>
+    <h5>Rasmiy bogʻlanish va ijtimoiy tarmoqlar</h5>
+    <div class="f-links">
+      <a id="tgLink" href="#" target="_blank" rel="noopener" style="display:none"><svg viewBox="0 0 24 24"><path d="M21.9 4.3 18.7 19c-.2 1-.8 1.3-1.7.8l-4.7-3.5-2.3 2.2c-.3.3-.5.5-1 .5l.3-4.8 8.7-7.9c.4-.3-.1-.5-.6-.2L6.6 12.9 2 11.5c-1-.3-1-1 .2-1.5L20.3 3c.8-.3 1.6.2 1.6 1.3z"/></svg>Telegram</a>
+      <a href="https://instagram.com/umrbek_mamatov" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M12 7.2A4.8 4.8 0 1 0 12 16.8 4.8 4.8 0 0 0 12 7.2zm0 7.9a3.1 3.1 0 1 1 0-6.2 3.1 3.1 0 0 1 0 6.2zM17.2 6a1.1 1.1 0 1 0 0 2.2 1.1 1.1 0 0 0 0-2.2zM12 2.2c-2.6 0-3 0-4 .1-2.8.1-4.4 1.7-4.5 4.5-.1 1-.1 1.4-.1 4s0 3 .1 4c.1 2.800 1.700 4.400 4.500 4.500 1 .1 1.400.1 4 .1s3 0 4-.1c2.800-.1 4.400-1.700 4.500-4.500.1-1 .1-1.400.1-4s0-3-.1-4c-.1-2.800-1.700-4.400-4.500-4.500-1-.1-1.400-.1-4-.1z" fill="none" stroke="currentColor" stroke-width="1.6"/></svg>Instagram (@umrbek_mamatov)</a>
+      <a href="https://facebook.com/umrbek.mamatov" target="_blank" rel="noopener"><svg viewBox="0 0 24 24"><path d="M13.5 22v-8.2h2.8l.5-3.300h-3.300V8.400c0-.9.4-1.700 1.800-1.700h1.600V3.800c-.3 0-1.300-.2-2.400-.2-2.500 0-4.100 1.500-4.100 4.200v2.700H7.700v3.300h2.700V22z"/></svg>Facebook (Umrbek Mamatov)</a>
+      <a href="tel:+998996601415"><svg viewBox="0 0 24 24"><path d="M6.600 10.800a15 15 0 0 0 6.600 6.600l2.200-2.200c.3-.3.7-.4 1-.2 1.100.4 2.300.6 3.600.6.6 0 1 .4 1 1V20c0 .6-.4 1-1 1A17 17 0 0 1 3 4c0-.6.4-1 1-1h3.500c.6 0 1 .4 1 1 0 1.300.2 2.500.6 3.600.1.300 0 .7-.2 1z"/></svg>+998 99 660 14 15</a>
+      <a href="mailto:umrbek84@gmail.com"><svg viewBox="0 0 24 24"><path d="M20 4H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2zm0 4-8 5-8-5V6l8 5 8-5z"/></svg>umrbek84@gmail.com</a>
+    </div>
+    <div class="f-copy">© 2026 Umrbek Mamatov. Barcha huquqlar himoyalangan.</div>
+  </div>
 </footer>
 
 <!-- Test oynasi -->
@@ -198,6 +229,10 @@ footer{padding:34px 0 44px;text-align:center;font-size:13px;color:var(--ink-2);b
 <script>
   // Apps Script web-ilova manzili
   const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbz7n-9vwmDvaFofqh8qddAW0aYEAs-i2uh1sDYJoIx1tCuupQel03SLXBa4W8G_zoOerw/exec';
+
+  // Telegram manzilini shu yerga yozing (masalan 'https://t.me/kanal_nomi'); boʻsh boʻlsa tugma chiqmaydi
+  const TELEGRAM_URL = '';
+  if (TELEGRAM_URL) { const t = document.getElementById('tgLink'); t.href = TELEGRAM_URL; t.style.display = 'inline-flex'; }
 
   const overlay = document.getElementById('overlay');
   const frame = document.getElementById('frame');
