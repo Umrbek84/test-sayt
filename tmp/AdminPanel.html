@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin panel</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css">
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/contrib/auto-render.min.js"></script>
+<style>
+:root{--ink:#1b1740;--ink2:#4a4670;--mut:#7a7699;--bg:#f6f4fb;--card:#fff;--line:#e6e2f3;--brand:#5b34c9;--brand2:#7c5ce6;--deep:#2a1670;--gold:#f2b134;--ok:#17a673;--bad:#d64545;--warn:#e08a00;--shadow:0 10px 30px -12px rgba(52,28,120,.28)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Times New Roman',Times,serif;color:var(--ink);background:var(--bg);line-height:1.5;overflow-x:hidden;background-attachment:fixed}
+input,select,button{font:inherit;color:inherit}
+.hide{display:none!important}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:0;cursor:pointer;font-weight:700;font-size:16px;padding:12px 24px;border-radius:12px;transition:.2s;text-decoration:none}
+.btn:disabled{opacity:.6;cursor:wait}
+.btn-main{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff;box-shadow:0 10px 22px -10px rgba(91,52,201,.8)}
+.btn-main:hover{transform:translateY(-2px)}
+.btn-gold{background:var(--gold);color:var(--deep);box-shadow:0 10px 22px -10px rgba(242,177,52,.9)}
+.btn-gold:hover{transform:translateY(-2px);background:#ffc04d}
+.btn-soft{background:#efeafc;color:var(--brand)}
+.btn-soft:hover{background:#e4dcf8}
+.btn-danger{background:linear-gradient(135deg,#e04848,#c62828);color:#fff;box-shadow:0 10px 22px -12px rgba(198,40,40,.8)}
+.btn-danger:hover{transform:translateY(-1px)}
+.btn-line{background:#fff;color:var(--ink2);border:1.5px solid var(--line)}
+.btn-line:hover{border-color:var(--brand2);color:var(--brand)}
+.btn-block{width:100%}
+.field label{display:block;font-weight:700;font-size:14px;color:var(--ink2);margin-bottom:6px}
+.field select,.field input,.inp{width:100%;padding:13px 14px;font-size:17px;border:1.5px solid var(--line);border-radius:12px;background:#fff;outline:0;transition:.15s}
+.field select:focus,.field input:focus,.inp:focus{border-color:var(--brand2);box-shadow:0 0 0 4px rgba(124,92,230,.15)}
+.field input[readonly],.field select:disabled{background:#f6f4fb;color:var(--mut)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow)}
+/* savol kartasi va variantlar (o'quvchi va admin uchun umumiy) */
+.qcard{position:relative;background:#fff;border:1px solid var(--line);border-radius:20px;box-shadow:0 14px 34px -16px rgba(52,28,120,.35);padding:48px 32px 26px;min-height:360px}
+.qtime{position:absolute;top:14px;right:16px;background:#e8f2ff;color:#1768b8;padding:4px 13px;border-radius:99px;font-size:13px;font-weight:700;border:1px solid #c6defa}
+.qtxt{font-size:23px;line-height:1.55;margin:4px 0 20px;white-space:pre-wrap}
+.qimg{text-align:center;margin-bottom:16px}
+.qimg img{max-width:100%;max-height:340px;border:1px solid var(--line);border-radius:12px;background:#fff}
+.opt{display:flex;align-items:center;gap:14px;padding:12px 16px;border:1.5px solid var(--line);border-radius:14px;margin-bottom:11px;background:#fff;font-size:20px;transition:.15s}
+.opt .ltr{flex:none;width:36px;height:36px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:16px;background:#efeafc;color:var(--brand);transition:.15s}
+.opt .otx{flex:1;min-width:0}
+.opt.pick{cursor:pointer}
+.opt.pick:hover{border-color:var(--brand2);background:#faf8ff;transform:translateX(2px)}
+.opt.sel{border-color:var(--brand);background:#f3efff;box-shadow:0 0 0 3px rgba(124,92,230,.15)}
+.opt.sel .ltr{background:var(--brand);color:#fff}
+.opt.correct{border-color:#2fa56b;background:#e9f8ef;color:#1b7a43}
+.opt.correct .ltr{background:#2fa56b;color:#fff}
+.opt.wrong{border-color:#e05555;background:#fdecec;color:#b32525}
+.opt.wrong .ltr{background:#e05555;color:#fff}
+.opt.missed{border-color:#f0b43c;background:#fff8e6}
+.opt.missed .ltr{background:#f0b43c;color:#fff}
+.opt.plain{font-size:19px}
+.openin{width:100%;padding:16px 18px;font-size:24px;border:2px solid var(--line);border-radius:14px;outline:0;background:#fff;letter-spacing:.5px;user-select:text;-webkit-user-select:text}
+.openin:focus{border-color:var(--brand2);box-shadow:0 0 0 4px rgba(124,92,230,.15)}
+.openin:disabled{background:#faf8ff}
+.hint{color:var(--mut);font-size:15px;margin-bottom:8px}
+.info-block{font-size:21px;line-height:1.8;background:#fbfaff;padding:26px 28px;border-radius:14px;border-left:8px solid var(--brand2);text-align:justify}
+/* navigator */
+.q-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:10px;justify-items:center}
+.q-num{width:44px;height:44px;display:flex;align-items:center;justify-content:center;border-radius:50%;cursor:pointer;font-weight:700;font-size:15px;border:2px solid #e4e0f0;color:#5b5675;background:linear-gradient(145deg,#fff,#f3f0fb);box-shadow:0 2px 5px rgba(80,60,140,.1);transition:.2s}
+.q-num:hover{transform:translateY(-2px) scale(1.06);border-color:#b39ddb}
+.q-num.active{border-color:var(--brand)!important;color:var(--brand);background:#fff;transform:scale(1.12);box-shadow:0 0 0 4px rgba(126,87,194,.22),0 4px 10px rgba(80,60,140,.2)}
+.q-num.answered-nav{background:linear-gradient(145deg,#7e57c2,#5e35b1)!important;color:#fff!important;border-color:#5e35b1!important;box-shadow:0 3px 8px rgba(94,53,177,.35)}
+.q-num.correct-nav{background:linear-gradient(145deg,#4fc07f,#1f8a4c)!important;color:#fff!important;border-color:#1f8a4c!important}
+.q-num.wrong-nav{background:linear-gradient(145deg,#ef6a6a,#c62828)!important;color:#fff!important;border-color:#c62828!important}
+.q-num.none-nav{background:#fff;color:#a29db8;border:2px dashed #d3cde8;box-shadow:none}
+.q-num.info-nav{background:#e8f2ff!important;color:#1768b8!important;border:2px solid #1768b8!important;border-radius:12px;font-style:italic;font-size:13px}
+.q-legend{display:flex;gap:14px;justify-content:center;flex-wrap:wrap;margin-top:14px;font-size:13px;color:var(--mut)}
+.q-legend i{display:inline-block;width:12px;height:12px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+/* soat */
+.timer-card{background:linear-gradient(145deg,#2b1b5a,#4527a0 60%,#5e35b1);border-radius:18px;padding:16px 18px 14px;color:#fff;box-shadow:0 12px 26px -10px rgba(69,39,160,.6);text-align:center}
+.timer-label{font-weight:700;font-size:12px;letter-spacing:2.5px;opacity:.8;margin-bottom:2px}
+.timer-box{font-size:48px;font-weight:700;font-family:Consolas,'Courier New',monospace;font-variant-numeric:tabular-nums;letter-spacing:3px;color:#fff;text-shadow:0 0 16px rgba(179,157,219,.85);line-height:1.15}
+.timer-bar{height:7px;background:rgba(255,255,255,.18);border-radius:6px;overflow:hidden;margin-top:10px}
+#timerBar{height:100%;width:100%;background:linear-gradient(90deg,#80deea,#b39ddb);border-radius:6px;transition:width 1s linear,background .5s}
+.timer-card.warn{background:linear-gradient(145deg,#6a3d00,#e65100 70%,#fb8c00);box-shadow:0 12px 26px -10px rgba(230,81,0,.6)}
+.timer-card.warn #timerBar{background:linear-gradient(90deg,#ffe082,#ffb74d)}
+.timer-card.danger{background:linear-gradient(145deg,#5f0d0d,#b71c1c 70%,#e53935);box-shadow:0 12px 26px -10px rgba(183,28,28,.7);animation:pulseT 1s infinite}
+.timer-card.danger #timerBar{background:linear-gradient(90deg,#ffcdd2,#ef9a9a)}
+@keyframes pulseT{50%{transform:scale(1.02)}}
+.katex{font-size:1.1em}
+body{user-select:text}
+.top{position:sticky;top:0;z-index:30;display:flex;justify-content:space-between;align-items:center;gap:10px;padding:14px 24px;color:#fff;background:linear-gradient(135deg,#2a1670,#4a27b0 60%,#5b34c9);box-shadow:0 8px 24px -12px rgba(0,0,0,.5)}
+.top .tb{display:flex;align-items:center;gap:12px;font-size:19px;font-weight:700}
+.top .lg{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:var(--gold);color:var(--deep);font-size:19px}
+.wrap{max-width:1180px;margin:0 auto;padding:22px 20px 50px}
+.login{max-width:400px;margin:90px auto;padding:34px 30px;text-align:center}
+.login .lg2{width:60px;height:60px;border-radius:18px;margin:0 auto 12px;display:grid;place-items:center;font-size:28px;background:linear-gradient(135deg,var(--brand),var(--brand2));color:#fff}
+.login h2{font-size:28px}
+.login input{width:100%;margin:18px 0 14px;text-align:center;font-size:26px;letter-spacing:8px;padding:12px;border:2px solid var(--line);border-radius:14px;outline:0}
+.login input:focus{border-color:var(--brand2);box-shadow:0 0 0 4px rgba(124,92,230,.15)}
+.msg{color:var(--bad);margin-top:10px;font-size:15px}
+.panel{padding:20px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:14px}
+.bar input{flex:1;min-width:220px}.bar select{min-width:150px;width:auto}
+.cnt{color:var(--mut);font-size:15px;margin-bottom:10px}
+.tw{overflow:auto;border:1px solid var(--line);border-radius:14px}
+table{width:100%;border-collapse:collapse;font-size:16px}
+th{background:#efeafc;color:var(--brand);text-align:left;padding:12px 14px;font-size:13px;letter-spacing:.06em;text-transform:uppercase;white-space:nowrap}
+td{padding:11px 14px;border-top:1px solid var(--line)}
+tbody tr:hover td{background:#faf8ff}
+.nm{font-weight:700;color:var(--deep)}
+.fan{display:inline-block;padding:3px 12px;border-radius:99px;font-size:14px;font-weight:700;color:#fff}
+.sc{display:inline-block;min-width:62px;text-align:center;padding:4px 12px;border-radius:99px;font-weight:700;font-size:15px}
+.sc.hi{background:#e3f6ec;color:#17794a}.sc.mid{background:#fff3dc;color:#a76400}.sc.lo{background:#fde7e7;color:#b32525}
+.rbtn{padding:8px 16px;font-size:14px}
+.back{margin-bottom:14px}
+.dhead{display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;align-items:flex-start}
+.dhead h3{font-size:26px;color:var(--deep)}
+.dsub{color:var(--mut);font-size:16px}
+.sum{display:flex;flex-wrap:wrap;gap:10px;margin:16px 0 4px}
+.chip{padding:9px 18px;border-radius:99px;font-weight:700;background:#efeafc;color:var(--brand)}
+.chip.ok{background:#e3f6ec;color:#17794a}.chip.bad{background:#fde7e7;color:#b32525}.chip.no{background:#eeeef2;color:#5c5a70}
+.vt{display:inline-flex;gap:4px;margin:14px 0 0;background:#efeafc;border-radius:14px;padding:4px}
+.vt button{border:0;background:transparent;padding:9px 18px;border-radius:11px;font-weight:700;cursor:pointer;color:var(--brand)}
+.vt button.on{background:var(--brand);color:#fff;box-shadow:0 6px 14px -6px rgba(91,52,201,.8)}
+.cab{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:20px;align-items:start;margin-top:16px}
+.side{display:flex;flex-direction:column;gap:14px;position:sticky;top:86px}
+.sbox{background:#fff;border:1px solid var(--line);border-radius:18px;box-shadow:0 10px 26px -14px rgba(52,28,120,.3);padding:16px}
+.stepbtns{display:flex;gap:12px;justify-content:center;margin-top:16px}
+.openbox{padding:14px 18px;border-radius:14px;border:1.5px solid var(--line);font-size:22px;background:#faf8ff;margin-bottom:12px}
+.pnl{display:inline-block;margin-bottom:8px;font-weight:700;color:var(--mut);font-size:15px}
+.pnl.no{color:var(--bad)}
+.filters{display:flex;gap:8px;flex-wrap:wrap;margin-top:16px}
+.filters button{border:0;border-radius:99px;padding:8px 18px;font-weight:700;cursor:pointer;background:#efeafc;color:var(--brand)}
+.filters button.on{background:var(--deep);color:#fff}
+.qs{display:grid;gap:12px;margin-top:14px}
+.q{border:1px solid var(--line);border-left:8px solid #bbb;border-radius:14px;padding:14px 18px;background:#fff}
+.q.ok{border-left-color:#2fa56b}.q.bad{border-left-color:#e05555}.q.no{border-left-color:#aaa}
+.q .h{display:flex;justify-content:space-between;gap:10px;flex-wrap:wrap;font-weight:700;margin-bottom:6px}
+.q .t{font-size:18px;line-height:1.5;margin-bottom:8px;white-space:pre-wrap}
+.q img{max-width:100%;max-height:260px;margin:6px 0;border:1px solid var(--line);border-radius:10px}
+.q .os{font-size:15px;color:var(--ink2);margin:4px 0 8px}
+.ans{display:flex;flex-wrap:wrap;gap:8px;font-size:16px}
+.ans>span{padding:6px 12px;border-radius:10px;background:#f3f1fa}
+.ans>.g{background:#e3f6ec;color:#17794a;font-weight:700}
+.ans>.r{background:#fde7e7;color:#b32525;font-weight:700}
+.tcard{background:linear-gradient(145deg,#2b1b5a,#4527a0 60%,#5e35b1);border-radius:16px;padding:14px 16px;color:#fff;text-align:center}
+.tcard .l{font-weight:700;font-size:12px;letter-spacing:2.5px;opacity:.8}
+.tcard .v{font:700 38px Consolas,'Courier New',monospace;letter-spacing:2px;text-shadow:0 0 14px rgba(179,157,219,.85)}
+.q-num{font-family:inherit}
+@media(max-width:900px){.cab{grid-template-columns:1fr}.side{position:static}.qcard{padding:22px 18px}.qtxt{font-size:20px}.top{padding:12px 14px}.top .tb{font-size:16px}}
+</style>
+</head>
+<body>
+<div id="login" class="card login">
+  <div class="lg2">🛡</div>
+  <h2>Admin panel</h2>
+  <div class="mut" style="color:var(--mut)">Öquvçilar javoblarini köriş</div>
+  <input type="password" id="pin" placeholder="PIN" onkeydown="if(event.key==='Enter')doLogin()">
+  <button class="btn btn-main btn-block" onclick="doLogin()">KIRIŞ</button>
+  <div class="msg" id="lmsg"></div>
+</div>
+
+<div id="app" class="hide">
+  <div class="top"><div class="tb"><span class="lg"><svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="#2a1670" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 4h8v5a4 4 0 0 1-8 0z" fill="#2a1670"/><path d="M8 5H5v2a3 3 0 0 0 3 3M16 5h3v2a3 3 0 0 1-3 3"/><path d="M12 13v4M9.5 17h5v3h-5zM8 20h8"/></svg></span>Olimpiada tayyorgarligi — Admin panel</div><button class="btn btn-gold rbtn" onclick="loadList()">⟳ Yangilaş</button></div>
+  <div class="wrap">
+    <div id="listView" class="card panel">
+      <div class="bar">
+        <input class="inp" id="search" placeholder="F.I.Ş. yoki maktab böyiça qidiriş..." oninput="renderList()">
+        <select class="inp" id="fanF" onchange="renderList()"><option value="">Barça fanlar</option><option>Matematika</option><option>Kimyo</option><option>Biologiya</option><option>Fizika</option><option>Informatika</option><option>Tarix</option><option>Geografiya</option><option>Ona tili</option><option>Huquq</option><option>Ingliz tili</option><option>Rus tili</option><option>Nemis tili</option><option>Fransuz tili</option></select>
+        <select class="inp" id="gradeF" onchange="renderList()"><option value="">Barça sinflar</option><option value="9">9-sinf</option><option value="10">10-sinf</option><option value="11">11-sinf</option></select>
+      </div>
+      <div class="cnt" id="cnt"></div>
+      <div class="tw"><table>
+        <thead><tr><th>Vaqt</th><th>F.I.Ş.</th><th>Maktab</th><th>Fan</th><th>Sinf</th><th>Ball</th><th></th></tr></thead>
+        <tbody id="rows"><tr><td colspan="7">Yuklanmoqda...</td></tr></tbody>
+      </table></div>
+    </div>
+
+    <div id="detView" class="hide">
+      <button class="btn btn-line back" onclick="back()">← Röyxatga qaytiş</button>
+      <div class="card panel">
+        <div class="dhead"><div><h3 id="dName"></h3><div class="dsub" id="dSub"></div></div></div>
+        <div class="sum" id="dSum"></div>
+        <div class="vt" id="vt"><button class="on" data-v="cab" onclick="setV('cab')">Kabinet körinişi</button><button data-v="list" onclick="setV('list')">Röyxat körinişi</button></div>
+        <div id="cabView" class="cab">
+          <div>
+            <div class="qcard"><div class="qtime" id="cTime"></div><div class="qtxt" id="cText"></div><div id="cImg"></div><div id="cOpts"></div></div>
+            <div class="stepbtns"><button class="btn btn-line" onclick="cabStep(-1)">← Oldingi</button><button class="btn btn-main" onclick="cabStep(1)">Keyingi →</button></div>
+          </div>
+          <div class="side">
+            <div class="sbox"><div class="q-grid" id="cNav"></div>
+              <div class="q-legend"><span><i style="background:#2fa56b"></i>Töğri</span><span><i style="background:#e05555"></i>Notöğri</span><span><i style="background:#fff;border:2px dashed #cfc8e6"></i>Javobsiz</span></div></div>
+            <div class="sbox"><div class="tcard"><div class="l">JAMI SARFLANGAN VAQT</div><div class="v" id="cTotal">00:00:00</div></div></div>
+          </div>
+        </div>
+        <div class="filters hide" id="flt">
+          <button class="on" data-f="all" onclick="setF('all')">Barçasi</button>
+          <button data-f="ok" onclick="setF('ok')">Töğri</button>
+          <button data-f="bad" onclick="setF('bad')">Notöğri</button>
+          <button data-f="no" onclick="setF('no')">Javobsiz</button>
+        </div>
+        <div class="qs hide" id="qs"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+const $ = id => document.getElementById(id);
+let PIN = '', LIST = [], DET = null, FILTER = 'all', VIEW = 'cab', CUR = 0, QMAP = [];
+const FANCOL = {Matematika:'#5b34c9',Kimyo:'#17a673',Biologiya:'#e0662f',Fizika:'#2b86d9',Informatika:'#c0397a','Tarix':'#a0701a','Geografiya':'#1d8a8a','Ona tili':'#b3392f','Huquq':'#6a4c93','Ingliz tili':'#c2185b','Rus tili':'#3a6ea5','Nemis tili':'#8a6d1d','Fransuz tili':'#2f5aa8'};
+const L = ['A','B','C','D'];
+function esc(s){return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');}
+function sinf(g){return String(g).replace('-sinf','');}
+
+function doLogin(){
+  PIN = $('pin').value.trim(); $('lmsg').innerText='Tekşirilmoqda...';
+  google.script.run.withSuccessHandler(r=>{
+    if(r && r.success){ LIST=r.data; $('login').classList.add('hide'); $('app').classList.remove('hide'); renderList(); }
+    else $('lmsg').innerText=(r&&r.msg)||'Xatolik';
+  }).withFailureHandler(()=>{$('lmsg').innerText='Aloqa xatosi';}).adminList(PIN);
+}
+function loadList(){
+  $('rows').innerHTML='<tr><td colspan="7">Yuklanmoqda...</td></tr>';
+  google.script.run.withSuccessHandler(r=>{ if(r&&r.success){LIST=r.data;renderList();} }).adminList(PIN);
+}
+function scCls(s){const p=Number(String(s).replace(',','.'))/50;return p>=.6?'hi':p>=.3?'mid':'lo';}
+function renderList(){
+  const q=$('search').value.trim().toLowerCase(), f=$('fanF').value, g=$('gradeF').value;
+  const rows=LIST.filter(x=>(!f||x.fan===f)&&(!g||sinf(x.grade)===g)&&(!q||(x.name+' '+x.school).toLowerCase().includes(q)));
+  $('cnt').innerText='Jami urinişlar: '+rows.length;
+  $('rows').innerHTML=rows.length?rows.map(x=>'<tr><td style="white-space:nowrap">'+esc(x.stamp)+'</td><td class="nm">'+esc(x.name)+'</td><td>'+esc(x.school)+'</td><td><span class="fan" style="background:'+(FANCOL[x.fan]||'#666')+'">'+esc(x.fan)+'</span></td><td>'+esc(sinf(x.grade))+'</td><td><span class="sc '+scCls(x.score)+'">'+esc(String(x.score).replace('.',','))+'</span></td><td><button class="btn btn-main rbtn" onclick="openAtt('+x.id+')">Javoblar</button></td></tr>').join(''):'<tr><td colspan="7" style="text-align:center;color:var(--mut);padding:26px">Hozircha natija yöq.</td></tr>';
+}
+function openAtt(id){
+  $('listView').classList.add('hide'); $('detView').classList.remove('hide'); window.scrollTo(0,0);
+  $('qs').innerHTML='<div style="padding:20px;color:var(--mut)">Yuklanmoqda...</div>'; $('dName').innerText=''; $('dSub').innerText=''; $('dSum').innerHTML='';
+  google.script.run.withSuccessHandler(r=>{
+    if(!r||!r.success){ $('dSub').innerText=(r&&r.msg)||'Xatolik'; return; }
+    DET=r; FILTER='all'; renderDet();
+  }).withFailureHandler(()=>{$('dSub').innerText='Aloqa xatosi';}).adminAttempt(PIN,id);
+}
+function back(){ $('detView').classList.add('hide'); $('listView').classList.remove('hide'); }
+
+// ---- tekşiriş (test sahifasidagi bilan bir xil) ----
+function normOpen(v){return String(v==null?'':v).trim().toLowerCase().replace(/\s+/g,'').replace(/,/g,'.');}
+function numOf(v){v=normOpen(v);if(/^-?\d+(\.\d+)?\/\d+(\.\d+)?$/.test(v)){const p=v.split('/');return parseFloat(p[0])/parseFloat(p[1]);}if(/^-?\d+(\.\d+)?$/.test(v))return parseFloat(v);return NaN;}
+function isRight(q,a){
+  if(q.type==='open'){ if(a===undefined||normOpen(a)==='')return false; const x=normOpen(a),y=normOpen(q.answer); if(x===y)return true; const nx=numOf(x),ny=numOf(y); if(isNaN(nx)||isNaN(ny))return false; return Math.abs(nx-ny)<=Math.max(Math.abs(ny)*0.015,1e-9);}
+  return typeof a==='number'&&a==q.correct;
+}
+function fmt(s){s=Math.max(0,Math.round(s||0));return Math.floor(s/60)+' daq '+(s%60)+' s';}
+function hms(s){s=Math.max(0,Math.round(s||0));const p=n=>n<10?'0'+n:''+n;return p(Math.floor(s/3600))+':'+p(Math.floor(s%3600/60))+':'+p(s%60);}
+function stOf(q,a){const g=!(a===undefined||a===''||a===null);return !g?'no':(isRight(q,a)?'ok':'bad');}
+const clean=t=>String(t).replace(/^\s*\d+\s*[\.\)]\s+/,'').trim();
+
+function renderDet(){
+  const d=DET, i=d.info;
+  $('dName').innerText=i.name; $('dSub').innerText=i.school+' | '+i.fan+', '+sinf(i.grade)+'-sinf | '+i.stamp;
+  let ok=0,bad=0,no=0;
+  d.questions.forEach((q,idx)=>{ if(q.type==='info')return; const s=stOf(q,d.answers[idx]); if(s==='ok')ok++; else if(s==='bad')bad++; else no++; });
+  $('dSum').innerHTML='<div class="chip">Ball: '+esc(String(i.score).replace('.',','))+' / 50</div><div class="chip ok">Töğri: '+ok+'</div><div class="chip bad">Notöğri: '+bad+'</div><div class="chip no">Javobsiz: '+no+'</div>';
+  CUR=0; setV(VIEW);
+}
+function setV(v){VIEW=v;document.querySelectorAll('#vt button').forEach(b=>{b.className=b.dataset.v===v?'on':'';});
+  $('cabView').classList.toggle('hide',v!=='cab');$('flt').classList.toggle('hide',v!=='list');$('qs').classList.toggle('hide',v!=='list');
+  if(v==='cab')drawCab();else drawQs();}
+function setF(f){ FILTER=f; document.querySelectorAll('#flt button').forEach(b=>{b.className=(b.dataset.f===f)?'on':'';}); drawQs(); }
+
+function drawQs(){
+  const d=DET; let num=0, html='';
+  d.questions.forEach((q,idx)=>{
+    if(q.type==='info')return; num++;
+    const a=d.answers[idx], given=!(a===undefined||a===''||a===null), st=stOf(q,a);
+    if(FILTER!=='all'&&FILTER!==st)return;
+    const mark=st==='ok'?'✓ Töğri':st==='bad'?'✗ Notöğri':'— Javob berilmagan';
+    let gh='',ch='';
+    if(q.type==='open'){ gh=given?esc(a):'—'; ch=esc(q.answer); }
+    else { gh=given?(L[a]+') '+esc(q.opt[a])):'—'; ch=L[q.correct]+') '+esc(q.opt[q.correct]); }
+    const opts=q.type==='open'?'':'<div class="os">'+q.opt.map((o,k)=>L[k]+') '+esc(o)).join(' &nbsp;|&nbsp; ')+'</div>';
+    html+='<div class="q '+st+'"><div class="h"><span>'+num+'-savol <span style="font-weight:400;color:var(--mut)">('+String(q.pts).replace('.',',')+' ball)</span></span><span>'+mark+' &nbsp;·&nbsp; <span style="font-weight:400">'+fmt(d.times[idx])+'</span></span></div>'
+      +'<div class="t">'+esc(clean(q.q))+'</div>'+(q.img?'<img src="'+q.img+'">':'')+opts
+      +'<div class="ans"><span class="'+(st==='ok'?'g':st==='bad'?'r':'')+'">Öquvçi javobi: '+gh+'</span>'+(st==='ok'?'':'<span class="g">Töğri javob: '+ch+'</span>')+'</div></div>';
+  });
+  $('qs').innerHTML=html||'<div style="padding:16px;color:var(--mut)">Bu bölimda savol yöq.</div>';
+  renderMath($('qs'));
+}
+
+function drawCab(){
+  const d=DET; QMAP=[]; d.questions.forEach((q,i)=>{if(q.type!=='info')QMAP.push(i);});
+  if(CUR>=QMAP.length)CUR=0;
+  let nav='',tot=0;
+  QMAP.forEach((i,k)=>{const q=d.questions[i],st=stOf(q,d.answers[i]),t=d.times[i]||0;tot+=t;
+    nav+='<div class="q-num '+(st==='ok'?'correct-nav':st==='bad'?'wrong-nav':'none-nav')+(k===CUR?' active':'')+'" title="'+fmt(t)+'" onclick="cabGo('+k+')">'+(k+1)+'</div>';});
+  $('cNav').innerHTML=nav;$('cTotal').innerText=hms(tot);
+  const i=QMAP[CUR],q=d.questions[i],a=d.answers[i];
+  $('cTime').innerText='Sarflangan vaqt: '+hms(d.times[i]||0);
+  $('cText').innerText=clean(q.q);
+  $('cImg').innerHTML=q.img?'<div class="qimg"><img src="'+q.img+'"></div>':'';
+  const g=!(a===undefined||a===''||a===null);
+  let o='<div class="pnl'+(g?'':' no')+'">'+(g?'Öquvçi javobi:':'Öquvçi bu savolga javob bermagan')+'</div>';
+  if(q.type==='open'){
+    const ok=g&&isRight(q,a);
+    o='<div class="pnl">Öquvçi kiritgan javob:</div><div class="openbox">'+(g?esc(a):'— javob kiritilmagan —')+'</div>'
+     +'<div class="opt plain '+(ok?'correct':'missed')+'"><span class="otx">'+(ok?'Töğri ✓':'Töğri javob: <b>'+esc(q.answer)+'</b>')+'</span></div>';
+  } else {
+    q.opt.forEach((t,k)=>{let c='',sym='';
+      if(g){ if(k===a){ if(k==q.correct){c='correct';sym=' ✓';}else{c='wrong';sym=' ✗';} } else if(k==q.correct){c='missed';sym=' (töğri javob)';} }
+      else if(k==q.correct){c='missed';sym=' (töğri javob)';}
+      o+='<div class="opt '+c+'"><span class="ltr">'+L[k]+'</span><span class="otx">'+esc(t)+'<b>'+sym+'</b></span></div>';});
+  }
+  $('cOpts').innerHTML=o;
+  renderMath($('cabView'));
+}
+function cabGo(k){CUR=k;drawCab();}
+function cabStep(d){const n=QMAP.length;CUR=Math.max(0,Math.min(n-1,CUR+d));drawCab();}
+
+function renderMath(el){
+  if(typeof renderMathInElement!=='function'){setTimeout(()=>renderMath(el),300);return;}
+  try{renderMathInElement(el,{delimiters:[{left:'$',right:'$',display:false}],throwOnError:false,strict:false});}catch(e){}
+}
+
+</script>
+<script>
+/* Yangi alifbo (ö ğ ş ç): serverdan keladigan matnlarni ko'rsatishda avtomatik o'giradi */
+(function(){
+  var BL={school:1,schools:1,schedule:1,search:1,show:1,short:1,shorts:1,shift:1,teacher:1,check:1,change:1,chip:1,chips:1,watch:1,icho:1,youtube:1,chrome:1,chat:1,chatgpt:1,whatsapp:1,english:1,russian:1,google:1,sheets:1,charset:1};
+  var SKIP={SCRIPT:1,STYLE:1,TEXTAREA:1,NOSCRIPT:1,CODE:1,PRE:1,INPUT:1};
+  function cw(w){
+    if(BL[w.toLowerCase()])return w;
+    w=w.replace(/([oOgG])[ʻ‘’`´'](?=[A-Za-z])/g,function(m,c){return {o:'ö',O:'Ö',g:'ğ',G:'Ğ'}[c]});
+    w=w.replace(/[Ss][Hh]/g,function(m){return m[0]==='S'?'Ş':'ş'});
+    w=w.replace(/[Cc][Hh]/g,function(m){return m[0]==='C'?'Ç':'ç'});
+    return w;
+  }
+  var RX=/https?:\/\/\S+|[\w.-]+@[\w.-]+\.\w+|[\w-]+\.(?:uz|com|org|me|net|ru)\b\S*|[A-Za-zʻʼ‘’`´']+/g;
+  function ct1(s){
+    if(!s||!/[A-Za-z]/.test(s))return s;
+    return s.replace(RX,function(m){ if(/^(https?:|.*@|.*\.(uz|com|org|me|net|ru))/i.test(m)&&/[.:@\/]/.test(m))return m; return cw(m)});
+  }
+  /* $...$ ichidagi formulalarga tegmaydi */
+  function ct(s){
+    if(!s||s.indexOf('$')<0)return ct1(s);
+    return s.split(/(\$[^$]*\$)/).map(function(p,i){return i%2?p:ct1(p)}).join('');
+  }
+  var busy=false;
+  function walk(n){
+    if(n.nodeType===3){var v=n.nodeValue,c=ct(v);if(c!==v)n.nodeValue=c;return}
+    if(n.nodeType!==1||SKIP[n.tagName])return;
+    if(n.classList&&(n.classList.contains('katex')||n.classList.contains('noconv')))return;
+    if(n.hasAttribute&&(n.hasAttribute('placeholder')||n.hasAttribute('title'))){
+      ['placeholder','title'].forEach(function(a){var v=n.getAttribute(a);if(v){var c=ct(v);if(c!==v)n.setAttribute(a,c)}});
+    }
+    for(var k=n.firstChild;k;k=k.nextSibling)walk(k);
+  }
+  function run(){ if(busy)return;busy=true;try{walk(document.body)}catch(e){}busy=false }
+  var t=null;
+  function later(){ clearTimeout(t); t=setTimeout(run,60) }
+  function init(){ run(); new MutationObserver(function(){ if(!busy)later() }).observe(document.body,{childList:true,subtree:true,characterData:true}); }
+  if(document.body)init(); else document.addEventListener('DOMContentLoaded',init);
+})();
+</script>
+</body>
+</html>
