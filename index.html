@@ -109,13 +109,14 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
 .res-row{background:var(--card);border:1px solid var(--line);border-radius:16px;min-height:66px;padding-top:10px;padding-bottom:10px;margin-bottom:10px;transition:.2s}
 .res-row:hover{border-color:var(--brand-2);transform:translateY(-1px)}
 .res-n{width:36px;height:36px;border-radius:50%;background:#efeafc;color:var(--brand);display:grid;place-items:center;font-weight:700;font-size:14px}
-.res-row:nth-child(2) .res-n{background:var(--gold);color:#2a1670}
 .res-name{font-weight:700;color:#2a1670}
 .res-sub{font-size:12px;color:var(--ink-2);font-weight:400}
 .res-ball b{font-size:16px}
 .res-ball small{display:block;font-size:12px;color:var(--ink-2)}
 .res-ball .bar{height:5px;border-radius:9px;background:#ece8f8;margin-top:4px;overflow:hidden}
 .res-ball .bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--brand),var(--ok))}
+.dl{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:99px;font-size:12px;font-weight:700}
+.dl.up{background:#e3f6ec;color:#17794a}.dl.dn{background:#fde7e7;color:#b32525}.dl.eq{background:#eeeef2;color:#5c5a70}
 .res-date{font-size:13px;color:var(--ink-2)}
 .res-msg{text-align:center;color:var(--ink-2);padding:30px 10px;background:var(--card);border:1px dashed var(--line);border-radius:16px}
 .res-more{display:block;margin:6px auto 0;font:inherit;font-weight:700;color:var(--brand);background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 26px;cursor:pointer}
@@ -220,15 +221,15 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
     <div class="res-stats">
       <div class="res-stat"><b id="rsCnt">–</b><span>Topşirganlar</span></div>
       <div class="res-stat"><b id="rsAvg">–</b><span>Örtaça ball (50 dan)</span></div>
-      <div class="res-stat"><b id="rsTop">–</b><span>Eng yuqori ball</span></div>
+      <div class="res-stat"><b id="rsTop">–</b><span>Örtaça farq (tuman bilan)</span></div>
     </div>
     <div class="res-tools">
       <input id="rQ" type="search" placeholder="F.I.Ş. yoki maktab böyiça qidiriş...">
       <select id="rFan"><option value="">Barça fanlar</option></select>
       <select id="rSinf"><option value="">Barça sinflar</option><option>9</option><option>10</option><option>11</option></select>
-      <select id="rSort"><option value="new">Topşiriş tartibi</option><option value="top">Ball böyiça (yuqori)</option></select>
+      <select id="rSort"><option value="new">Topşiriş tartibi</option><option value="top">Ball böyiça (yuqori)</option><option value="dn">Eng kamayganlar</option><option value="up">Eng ösganlar</option></select>
     </div>
-    <div class="res-head"><span>№</span><span>F.I.Ş.</span><span>Maktab</span><span>Fan</span><span>Ball</span><span>Sana</span></div>
+    <div class="res-head"><span>№</span><span>F.I.Ş.</span><span>Maktab</span><span>Fan</span><span>Ball / Tuman</span><span>Sana</span></div>
     <div id="rList"><div class="res-msg">Natijalar yuklanmoqda...</div></div>
     <button class="res-more" id="rMore" style="display:none">Yana körsatiş</button>
   </div>
@@ -294,7 +295,8 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
       var a=all.filter(function(r){
         return (!fan||r.fan===fan)&&(!sf||r.sinf===sf)&&(!q||(r.name+' '+r.school).toLowerCase().indexOf(q)>-1);
       });
-      a.sort(so==='top'?function(x,y){return y.ball-x.ball||x.t-y.t}:function(x,y){return x.t-y.t});
+      var dv=function(r){return r.tuman==null?(so==='dn'?1e9:-1e9):r.ball-r.tuman};
+      a.sort(so==='top'?function(x,y){return y.ball-x.ball||x.t-y.t}:so==='dn'?function(x,y){return dv(x)-dv(y)}:so==='up'?function(x,y){return dv(y)-dv(x)}:function(x,y){return x.t-y.t});
       var box=$('rList');
       if(!a.length){box.innerHTML='<div class="res-msg">Natija topilmadi.</div>';$('rMore').style.display='none';return}
       box.innerHTML=a.slice(0,shown).map(function(r,i){
@@ -303,7 +305,7 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
           '<div><div class="res-name">'+esc(r.name)+'</div></div>'+
           '<div class="c-school">'+esc(r.school)+'</div>'+
           '<div class="c-fan">'+esc(r.fan)+' — '+esc(r.sinf)+'-sinf</div>'+
-          '<div class="res-ball"><b>'+fmt(r.ball)+' ball</b><small>'+Math.round(p)+'%</small><div class="bar"><i style="width:'+p+'%"></i></div></div>'+
+          '<div class="res-ball"><b>'+fmt(r.ball)+' ball</b>'+(r.tuman!=null?(function(){var d=r.ball-r.tuman,c=d>0.04?'up':d<-0.04?'dn':'eq';return '<span class="dl '+c+'">'+(d>0.04?'+':d<-0.04?'−':'')+fmt(Math.abs(d))+'</span>'})():'')+'<small>'+(r.tuman!=null?'Tuman: '+fmt(r.tuman):Math.round(p)+'%')+'</small><div class="bar"><i style="width:'+p+'%"></i></div></div>'+
           '<div class="res-date c-date">'+esc(r.date)+'</div></div>';
       }).join('');
       $('rMore').style.display=a.length>shown?'block':'none';
@@ -312,14 +314,15 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
       var n=all.length;
       $('rsCnt').textContent=n;
       $('rsAvg').textContent=n?fmt(all.reduce(function(s,r){return s+r.ball},0)/n):'–';
-      $('rsTop').textContent=n?fmt(Math.max.apply(null,all.map(function(r){return r.ball}))):'–';
+      var wd=all.filter(function(r){return r.tuman!=null});
+      if(wd.length){var m=wd.reduce(function(s,r){return s+r.ball-r.tuman},0)/wd.length;$('rsTop').textContent=(m>0.04?'+':m<-0.04?'−':'')+fmt(Math.abs(m));$('rsTop').style.color=m>0.04?'#17794a':m<-0.04?'#b32525':'';}else $('rsTop').textContent='–';
       var fans={};all.forEach(function(r){if(r.fan)fans[r.fan]=1});
       $('rFan').innerHTML='<option value="">Barça fanlar</option>'+Object.keys(fans).sort().map(function(f){return '<option>'+esc(f)+'</option>'}).join('');
     }
     function load(){
       fetch(SCRIPT_URL+'?results=1').then(function(r){return r.json()}).then(function(j){
         if(!j.success)throw new Error(j.msg||'xato');
-        all=j.data.map(function(r){r.ball=Number(r.ball)||0;r.t=ts(r.date);return r});
+        all=j.data.map(function(r){r.ball=Number(r.ball)||0;r.tuman=(r.tuman==null||r.tuman==='')?null:Number(r.tuman);r.t=ts(r.date);return r});
         stats();render();
       }).catch(function(){
         $('rList').innerHTML='<div class="res-msg">Natijalarni yuklab bölmadi. Keyinroq urinib köring.</div>';
