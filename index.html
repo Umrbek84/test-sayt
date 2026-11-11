@@ -95,6 +95,41 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
 .f-links svg{width:18px;height:18px;fill:#fff;flex:none}
 .f-copy{margin-top:30px;padding-top:20px;border-top:1px solid #222c47;text-align:center;font-size:13px}
 
+
+/* natijalar */
+.res-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-bottom:16px}
+.res-stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 16px;text-align:center;box-shadow:var(--shadow)}
+.res-stat b{display:block;font-size:34px;color:var(--brand);line-height:1.1}
+.res-stat span{font-size:14px;color:var(--ink-2)}
+.res-tools{display:grid;grid-template-columns:1fr 170px 130px 190px;gap:12px;margin-bottom:16px}
+.res-tools input,.res-tools select{font:inherit;font-size:16px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px;width:100%}
+.res-tools input:focus,.res-tools select:focus{outline:2px solid var(--brand-2);border-color:transparent}
+.res-head,.res-row{display:grid;grid-template-columns:52px 2.2fr 1.1fr 1.6fr 1fr 1.1fr;gap:12px;align-items:center;padding:0 18px}
+.res-head{font-size:12px;font-weight:700;letter-spacing:.06em;color:var(--ink-2);text-transform:uppercase;margin-bottom:8px}
+.res-row{background:var(--card);border:1px solid var(--line);border-radius:16px;min-height:66px;padding-top:10px;padding-bottom:10px;margin-bottom:10px;transition:.2s}
+.res-row:hover{border-color:var(--brand-2);transform:translateY(-1px)}
+.res-n{width:36px;height:36px;border-radius:50%;background:#efeafc;color:var(--brand);display:grid;place-items:center;font-weight:700;font-size:14px}
+.res-row:nth-child(2) .res-n{background:var(--gold);color:#2a1670}
+.res-name{font-weight:700;color:#2a1670}
+.res-sub{font-size:12px;color:var(--ink-2);font-weight:400}
+.res-ball b{font-size:16px}
+.res-ball small{display:block;font-size:12px;color:var(--ink-2)}
+.res-ball .bar{height:5px;border-radius:9px;background:#ece8f8;margin-top:4px;overflow:hidden}
+.res-ball .bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--brand),var(--ok))}
+.res-date{font-size:13px;color:var(--ink-2)}
+.res-msg{text-align:center;color:var(--ink-2);padding:30px 10px;background:var(--card);border:1px dashed var(--line);border-radius:16px}
+.res-more{display:block;margin:6px auto 0;font:inherit;font-weight:700;color:var(--brand);background:#fff;border:1px solid var(--line);border-radius:12px;padding:12px 26px;cursor:pointer}
+.res-more:hover{border-color:var(--brand-2)}
+@media(max-width:860px){
+  .res-tools{grid-template-columns:1fr 1fr}
+  .res-tools input{grid-column:1/-1}
+  .res-head{display:none}
+  .res-row{grid-template-columns:44px 1fr auto;row-gap:4px}
+  .res-row .c-school,.res-row .c-fan,.res-row .c-date{grid-column:2/-1;font-size:13px;color:var(--ink-2)}
+  .res-row .res-ball{grid-column:3;grid-row:1;text-align:right;min-width:90px}
+}
+@media(max-width:560px){.res-stats{grid-template-columns:1fr}}
+
 /* test overlay */
 #overlay{position:fixed;inset:0;z-index:100;background:#f0f2f5;display:none;flex-direction:column}
 #overlay.open{display:flex}
@@ -119,6 +154,7 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
       <a class="link" href="#fanlar">Fanlar</a>
       <a class="link" href="#tartib">Tartib</a>
       <a class="link" href="#qoidalar">Qoidalar</a>
+      <a class="link" href="#natijalar">Natijalar</a>
     </div>
   </div>
 </header>
@@ -178,6 +214,26 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
   </div>
 </section>
 
+<section id="natijalar" style="padding-top:0">
+  <div class="wrap">
+    <div class="sec-head"><h2>Natijalar</h2><p>Test topşirgan ğoliblar natijalari — topşiriş tartibida.</p></div>
+    <div class="res-stats">
+      <div class="res-stat"><b id="rsCnt">–</b><span>Topşirganlar</span></div>
+      <div class="res-stat"><b id="rsAvg">–</b><span>Örtaça ball (50 dan)</span></div>
+      <div class="res-stat"><b id="rsTop">–</b><span>Eng yuqori ball</span></div>
+    </div>
+    <div class="res-tools">
+      <input id="rQ" type="search" placeholder="F.I.Ş. yoki maktab böyiça qidiriş...">
+      <select id="rFan"><option value="">Barça fanlar</option></select>
+      <select id="rSinf"><option value="">Barça sinflar</option><option>9</option><option>10</option><option>11</option></select>
+      <select id="rSort"><option value="new">Topşiriş tartibi</option><option value="top">Ball böyiça (yuqori)</option></select>
+    </div>
+    <div class="res-head"><span>№</span><span>F.I.Ş.</span><span>Maktab</span><span>Fan</span><span>Ball</span><span>Sana</span></div>
+    <div id="rList"><div class="res-msg">Natijalar yuklanmoqda...</div></div>
+    <button class="res-more" id="rMore" style="display:none">Yana körsatiş</button>
+  </div>
+</section>
+
 <section style="padding-top:0">
   <div class="wrap">
     <div class="cta">
@@ -233,6 +289,55 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
   // Telegram manzilini shu yerga yozing (masalan 'https://t.me/kanal_nomi'); boʻsh boʻlsa tugma chiqmaydi
   const TELEGRAM_URL = '';
   if (TELEGRAM_URL) { const t = document.getElementById('tgLink'); t.href = TELEGRAM_URL; t.style.display = 'inline-flex'; }
+
+
+  // ===== Natijalar =====
+  (function(){
+    var MAXB = 50, PAGE = 20, all = [], shown = PAGE;
+    var $ = function(i){return document.getElementById(i)};
+    function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+    function fmt(n){return (Math.round(n*10)/10).toString().replace('.',',')}
+    function ts(d){var m=/(\d+)\.(\d+)\.(\d+)\s+(\d+):(\d+)/.exec(d||'');return m?new Date(+m[3],+m[2]-1,+m[1],+m[4],+m[5]).getTime():0}
+    function render(){
+      var q=$('rQ').value.trim().toLowerCase(), fan=$('rFan').value, sf=$('rSinf').value, so=$('rSort').value;
+      var a=all.filter(function(r){
+        return (!fan||r.fan===fan)&&(!sf||r.sinf===sf)&&(!q||(r.name+' '+r.school).toLowerCase().indexOf(q)>-1);
+      });
+      a.sort(so==='top'?function(x,y){return y.ball-x.ball||x.t-y.t}:function(x,y){return x.t-y.t});
+      var box=$('rList');
+      if(!a.length){box.innerHTML='<div class="res-msg">Natija topilmadi.</div>';$('rMore').style.display='none';return}
+      box.innerHTML=a.slice(0,shown).map(function(r,i){
+        var p=Math.min(100,r.ball/MAXB*100);
+        return '<div class="res-row"><div class="res-n">'+(i+1)+'</div>'+
+          '<div><div class="res-name">'+esc(r.name)+'</div></div>'+
+          '<div class="c-school">'+esc(r.school)+'</div>'+
+          '<div class="c-fan">'+esc(r.fan)+' — '+esc(r.sinf)+'-sinf</div>'+
+          '<div class="res-ball"><b>'+fmt(r.ball)+' ball</b><small>'+Math.round(p)+'%</small><div class="bar"><i style="width:'+p+'%"></i></div></div>'+
+          '<div class="res-date c-date">'+esc(r.date)+'</div></div>';
+      }).join('');
+      $('rMore').style.display=a.length>shown?'block':'none';
+    }
+    function stats(){
+      var n=all.length;
+      $('rsCnt').textContent=n;
+      $('rsAvg').textContent=n?fmt(all.reduce(function(s,r){return s+r.ball},0)/n):'–';
+      $('rsTop').textContent=n?fmt(Math.max.apply(null,all.map(function(r){return r.ball}))):'–';
+      var fans={};all.forEach(function(r){if(r.fan)fans[r.fan]=1});
+      $('rFan').innerHTML='<option value="">Barça fanlar</option>'+Object.keys(fans).sort().map(function(f){return '<option>'+esc(f)+'</option>'}).join('');
+    }
+    function load(){
+      fetch(SCRIPT_URL+'?results=1').then(function(r){return r.json()}).then(function(j){
+        if(!j.success)throw new Error(j.msg||'xato');
+        all=j.data.map(function(r){r.ball=Number(r.ball)||0;r.t=ts(r.date);return r});
+        stats();render();
+      }).catch(function(){
+        $('rList').innerHTML='<div class="res-msg">Natijalarni yuklab bölmadi. Keyinroq urinib köring.</div>';
+      });
+    }
+    ['rQ','rFan','rSinf','rSort'].forEach(function(i){$(i).addEventListener('input',function(){shown=PAGE;render()})});
+    $('rMore').addEventListener('click',function(){shown+=PAGE;render()});
+    load();
+  })();
 
   const overlay = document.getElementById('overlay');
   const frame = document.getElementById('frame');
