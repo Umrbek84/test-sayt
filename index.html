@@ -145,6 +145,19 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
 .spin{width:38px;height:38px;border:4px solid var(--line);border-top-color:var(--brand);border-radius:50%;animation:r 1s linear infinite;margin:0 auto 12px}
 @keyframes r{to{transform:rotate(360deg)}}
 </style>
+<style>
+#cdlg{position:fixed;inset:0;z-index:100000;display:none;align-items:center;justify-content:center;padding:20px;background:rgba(18,12,48,.62);-webkit-backdrop-filter:blur(3px);backdrop-filter:blur(3px)}
+#cdlg.open{display:flex}
+#cdlg .cbox{width:100%;max-width:400px;background:var(--card);border-radius:20px;padding:28px 24px 22px;text-align:center;box-shadow:0 24px 60px -16px rgba(18,12,48,.55);border:1px solid var(--line);font-family:'Times New Roman',Times,serif;animation:cdlgin .18s ease-out}
+#cdlg .cico{width:60px;height:60px;border-radius:50%;margin:0 auto 14px;display:grid;place-items:center;font-size:30px;background:linear-gradient(135deg,#fff4d6,#ffe3a0);color:#9a6a00}
+#cdlg h3{font-size:23px;line-height:1.25;color:var(--ink);margin-bottom:8px}
+#cdlg p{font-size:17px;line-height:1.45;color:var(--ink-2);margin-bottom:22px}
+#cdlg .cbtns{display:flex;flex-direction:column;gap:10px}
+#cdlg button{font-family:inherit;font-size:18px;font-weight:700;border:0;border-radius:14px;padding:14px 16px;cursor:pointer;width:100%}
+#cdlg .cstay{background:linear-gradient(135deg,var(--brand),var(--brand-2));color:#fff}
+#cdlg .cquit{background:#f1eefb;color:var(--ink)}
+@keyframes cdlgin{from{transform:translateY(10px) scale(.97);opacity:0}to{transform:none;opacity:1}}
+</style>
 </head>
 <body>
 
@@ -267,6 +280,18 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
   </div>
 </footer>
 
+<!-- Yopiş tasdiqi -->
+<div id="cdlg" role="alertdialog" aria-modal="true" aria-labelledby="cdlgT">
+  <div class="cbox">
+    <div class="cico">⚠</div>
+    <h3 id="cdlgT">Oynani yopmoqchimisiz?</h3>
+    <p>Yopsangiz, boşlangan test yöqoladi va bosh sahifaga qaytasiz.</p>
+    <div class="cbtns">
+      <button type="button" class="cstay" onclick="closeTest()">Testni davom ettiriş</button>
+      <button type="button" class="cquit" onclick="closeTest(true)">Yopiş va bosh sahifaga qaytiş</button>
+    </div>
+  </div>
+</div>
 <!-- Test oynasi -->
 <div id="overlay" role="dialog" aria-label="Test">
   <div id="bar">
@@ -355,8 +380,11 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
     overlay.classList.add('open');
     document.body.style.overflow = 'hidden';
   }
-  function closeTest() {
-    if (frame.getAttribute('src') && !confirm('Oynani yopsangiz, boşlangan test yöqoladi. Yopilsinmi?')) return;
+  function closeTest(force) {
+    var dlg = document.getElementById('cdlg');
+    if (dlg.classList.contains('open') && !force) { dlg.classList.remove('open'); return; }
+    if (!force && frame.getAttribute('src')) { dlg.classList.add('open'); return; }
+    dlg.classList.remove('open');
     frame.removeAttribute('src');
     overlay.classList.remove('open');
     document.body.style.overflow = '';
