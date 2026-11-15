@@ -1,0 +1,334 @@
+<!doctype html>
+<html lang="uz">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dasturlaş maşqi</title>
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--ink:#1b2430;--mut:#5b6678;--line:#d8deea;--pri:#1f5fbf;--ok:#1a8f4a;--bad:#c62828;--warn:#b26a00}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:17px/1.5 "Times New Roman",Times,serif}
+button,input,select,textarea{font-family:inherit}
+.top{display:flex;gap:14px;align-items:center;flex-wrap:wrap;background:#14325f;color:#fff;padding:10px 16px}
+.top h1{font-size:19px;margin:0;flex:1;min-width:220px}
+.chip{background:rgba(255,255,255,.14);padding:3px 11px;border-radius:14px;font-size:15px;white-space:nowrap}
+.chip.warn{background:#b23b3b}
+#timer{font-weight:bold;font-size:18px;font-variant-numeric:tabular-nums}
+.wrap{max-width:1250px;margin:0 auto;padding:14px}
+.login{max-width:520px;margin:34px auto;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:24px}
+.login h2{margin:0 0 6px}
+.login label{display:block;margin:12px 0 4px;font-weight:bold}
+.login input,.login select{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:8px;font-size:17px}
+.btn{background:var(--pri);color:#fff;border:0;border-radius:8px;padding:9px 18px;font-size:17px;cursor:pointer}
+.btn.sec{background:#fff;color:var(--pri);border:1px solid var(--pri)}
+.btn:disabled{opacity:.55;cursor:default}
+.rules{font-size:15px;color:var(--mut);margin-top:14px}
+.rules li{margin:2px 0}
+.layout{display:grid;grid-template-columns:200px 1fr;gap:14px}
+@media(max-width:820px){.layout{grid-template-columns:1fr}.tabs{flex-direction:row!important;flex-wrap:wrap}}
+.tabs{display:flex;flex-direction:column;gap:8px}
+.tab{background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer;display:flex;justify-content:space-between;align-items:center;font-size:16px;text-align:left}
+.tab.act{border-color:var(--pri);box-shadow:0 0 0 2px rgba(31,95,191,.18)}
+.tab b{margin-right:6px}
+.sc{font-size:14px;padding:1px 8px;border-radius:10px;background:#e8ecf4;color:var(--mut)}
+.sc.full{background:#d9f2e2;color:var(--ok)}
+.sc.part{background:#fff0d4;color:var(--warn)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;margin-bottom:14px}
+.card h2{margin:0 0 4px;font-size:22px}
+.meta{color:var(--mut);font-size:15px;margin-bottom:8px}
+.card h4{margin:12px 0 4px;font-size:17px}
+.card p{margin:4px 0}
+pre.io,.cmp pre{background:#f1f3f8;border:1px solid var(--line);border-radius:8px;padding:8px 10px;margin:4px 0;font:15px/1.4 Consolas,"Courier New",monospace;white-space:pre-wrap;word-break:break-all;max-height:220px;overflow:auto}
+.samp{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+textarea#code{width:100%;height:340px;font:16px/1.45 Consolas,"Courier New",monospace;border:1px solid var(--line);border-radius:8px;padding:10px;tab-size:4;resize:vertical;background:#fbfcff}
+.bar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-top:10px}
+.prog{flex:1;min-width:120px;height:8px;background:#e5e9f2;border-radius:6px;overflow:hidden;display:none}
+.prog i{display:block;height:100%;width:0;background:var(--pri)}
+.tests{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}
+.t{border-radius:8px;padding:3px 9px;font-size:14px;border:1px solid var(--line);background:#fff}
+.t.OK{background:#d9f2e2;border-color:#9bd5b1;color:#116a35}
+.t.WA,.t.RE,.t.TL{background:#fde4e4;border-color:#eaa;color:#a01d1d}
+.t.run{background:#eef3fd}
+.msg{margin-top:10px;font-size:16px}
+.msg.bad{color:var(--bad)}.msg.ok{color:var(--ok)}
+.cmp{margin-top:8px;display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+@media(max-width:700px){.cmp,.samp{grid-template-columns:1fr}}
+.cmp div b{font-size:14px;color:var(--mut)}
+table.res{border-collapse:collapse;width:100%;font-size:16px}
+table.res td,table.res th{border:1px solid var(--line);padding:5px 9px;text-align:left}
+.hide{display:none!important}
+</style>
+</head>
+<body>
+<div class="top">
+  <h1>Dasturlaş maşqi · Viloyat bosqiçiga tayyorgarlik</h1>
+  <span class="chip hide" id="who"></span>
+  <span class="chip hide" id="leaves">Çiqişlar: 0</span>
+  <span class="chip hide"><span id="timer">--:--:--</span></span>
+</div>
+
+<div class="wrap">
+<!-- KIRIŞ -->
+<div class="login" id="login">
+  <h2>Dasturlaş maşqi</h2>
+  <div class="meta">Python 3 · har bir masala 100 balldan · jami 500 ball</div>
+  <label>F.I.Ş.</label><input id="fio" autocomplete="off">
+  <label>Sinf</label>
+  <select id="cls"><option>9</option><option>10</option><option>11</option></select>
+  <label>Maktab</label><input id="school" autocomplete="off">
+  <div class="bar"><button class="btn" id="goBtn">Boşlaş</button><span id="loadMsg" class="meta"></span></div>
+  <ul class="rules">
+    <li>Dastur standart kiriş (input) orqali öqiydi va çiqişga (print) çiqaradi.</li>
+    <li>Bir test uçun vaqt çegarasi — 4 soniya. Boşqa oyna yoki saytga ötmang: har bir çiqiş hisoblanadi.</li>
+    <li>«Yuboriş» tugmasi barça yaşirin testlarni tekşiradi, eng yaxşi natija saqlanadi.</li>
+    <li>Natijalar bu qurilmada saqlanadi; nazoratçi sizni Google Meetda kuzatib turadi.</li>
+  </ul>
+</div>
+
+<!-- ASOSIY -->
+<div class="layout hide" id="main">
+  <div class="tabs" id="tabs"></div>
+  <div>
+    <div class="card" id="stmt"></div>
+    <div class="card">
+      <textarea id="code" spellcheck="false" autocapitalize="off" autocomplete="off"></textarea>
+      <div class="bar">
+        <button class="btn sec" id="runBtn">Namunada sinaş (Ctrl+Enter)</button>
+        <button class="btn" id="subBtn">Yuboriş</button>
+        <div class="prog" id="prog"><i></i></div>
+      </div>
+      <div id="out"></div>
+    </div>
+    <div class="card">
+      <h4 style="margin-top:0">Natijalar</h4>
+      <table class="res" id="resTable"></table>
+      <div class="bar"><button class="btn sec" id="copyBtn">Natijani nusxalaş</button><span class="meta" id="copyMsg"></span></div>
+    </div>
+  </div>
+</div>
+</div>
+
+<script>
+"use strict";
+var DURATION_MIN = Number(new URLSearchParams(location.search).get("min")) || 240;
+var TL_MS = 4000;
+var BASE = location.href.replace(/[#?].*$/, "").replace(/[^\/]*$/, "");
+
+var SETS = {"1": [{"key": "A", "name": "Keçki sayr", "lvl": "A", "samples": 3, "txt": ["Siz döstlaringiz bilan yilning X-kuni soat Y:00 da sayrga çiqmoqçisiz. Dostlaringiz orasida qoronğudan qörqadiganlar bor, şuning uçun faqat tungi çiroqlar yoqilgan vaqtda sayrga çiqa olasiz.", "Çiroqlar yilning faqat toq kunlari soat 18:00 dan 24:00 gaça yoqiladi.", "Rejalaştirgan vaqtda sayrga çiqa olsangiz «YES», aks holda «NO» sözini çiqaring."], "inp": "Yagona qatorda X (1 ≤ X ≤ 365) va Y (17 ≤ Y ≤ 23) sonlari kiritiladi.", "outp": "YES yoki NO."}, {"key": "B", "name": "Sirkdagi akrobatlar", "lvl": "B", "samples": 1, "txt": ["Sirkda jami N ta akrobat bor. Har bir akrobatning futbolkasida uning tartib raqami (1 dan N gaça) yozilgan. Muxlislar akrobatlarning tartibini qura taşlaş orqali özgartirişdi va ularni bir safga teriş qöyişdi.", "Endi akrobatlar safni qayta tartiblangan holga keltiriş uçun quyidagicha harakat qiladi. Safdagi tartibi [2, N−1] oraliqda bölgan ixtiyoriy bir akrobatga top uloqtiriladi (top uloqtiriluvçi özi ham şu oraliqda bölsa, özigaözi uloqtiriş mumkin). Topni qabul qilgan akrobatning çap va öng tomonidagi akrobatlar özaro örin almaşadi, ya'ni topni olgan akrobat örni position bölsa, position−1 va position+1 örinlardagi akrobatlar örin almaşadi.", "Bu amalni istalgança marta takrorlaş mumkin. Akrobatlarni futbolkadagi sonlar böyiça tartiblangan (1, 2, …, N) holga keltiriş mumkinmi?"], "inp": "Birinçi qatorda T (1 ≤ T ≤ 10⁴) — testlar soni. Har bir testda: N (1 ≤ N ≤ 2·10⁵), keyingi qatorda 1 dan N gaça bölgan sonlarning permutatsiyasi (safdagi futbolkalar tartibi). Barça testlardagi N larning yiğindisi 2·10⁵ dan oşmaydi.", "outp": "Har bir test uçun alohida qatorda YES (mumkin) yoki NO (mumkin emas)."}, {"key": "C", "name": "Çalğituvçi omillar", "lvl": "C", "samples": 1, "txt": ["Azizbek ICPC musobaqasiga tayyorlanmoqda. Sirojiddin unga S (sport dasturlaş) va M (matematika) harflaridan iborat N uzunlikdagi satr berdi. Satrda SMS va MSM qismsatrlari bölmasligi kerak (qismsatr — ketma-ket kelgan belgilar).", "Satrdan eng kamida neçta belgini öçiriş kerak? Qolgan belgilar öz tartibini saqlaydi."], "inp": "Birinçi qatorda T (1 ≤ T ≤ 2·10⁴). Har bir testda: N (1 ≤ N ≤ 3·10⁵), keyingi qatorda S va M dan iborat satr. Barça testlardagi N larning yiğindisi 3·10⁵ dan oşmaydi.", "outp": "Har bir test uçun alohida qatorda eng kam öçiriladigan belgilar soni."}, {"key": "D", "name": "Kalkulyator öyini", "lvl": "D", "samples": 1, "txt": ["Mardon va Husanboy kalkulyator öyinini öynaydi. Dastlab kalkulyatorda N soni yozilgan. Öyinçilar navbat bilan quyidagi amallardan birini bajaradi:", "• kalkulyatordagi sondan 1 ni ayiriş; • 1 dan katta x sonini tanlaş (kalkulyatordagi son x ga qoldiqsiz bölinişi şart) va sonni x ga bölib yuboriş.", "Kalkulyatordagi sonni 0 ga keltirgan öyinçi ğalaba qozonadi. Birinçi harakatni Mardon boşlaydi. Ikkala öyinçi optimal öynasa, kim ğalaba qozonadi?"], "inp": "Birinçi qatorda T (1 ≤ T ≤ 1000). Keyingi T qatorda bittadan N (1 ≤ N ≤ 10⁹).", "outp": "Har bir öyin uçun alohida qatorda ğolib ismini (Mardon yoki Husanboy) çiqaring."}, {"key": "E", "name": "Distinct values", "lvl": "E", "samples": 2, "txt": ["Sizga N ta nomanfiy butun sondan iborat A massiv berilgan. Bir harakatda ixtiyoriy i (1 ≤ i ≤ N) ni tanlab, A[i] = A[i] XOR 1 qilişingiz mumkin, ya'ni uning juft/toq holatini özgartiriş. Bu amalni xohlagança marta bajariş mumkin.", "Vazifa: barça i ≤ j juftliklar uçun distinct(A[i], A[i+1], …, A[j]) qiymatlari yiğindisini maksimallaştiriş. Bu yerda distinct(x) — x massivdagi har xil qiymatlar soni."], "inp": "Birinçi qatorda N (1 ≤ N ≤ 3·10⁵). Ikkinçi qatorda N ta butun son A[i] (0 ≤ A[i] < 2³¹).", "outp": "Amallardan söng yiğindining mumkin bölgan maksimal qiymatini çiqaring."}], "2": [{"key": "A", "name": "Tub qadamlar", "lvl": "A", "samples": 1, "txt": ["Siz x sonidan y sonini hosil qilişingiz kerak. Ikki xil amal bor: (1) x ga ixtiyoriy p tub sonni qöşiş; (2) x ni ixtiyoriy p tub songa köpaytiriş. Amallarni istalgança marta bajariş mumkin.", "Y ni hosil qila olsangiz «YES», aks holda «NO» sözini çiqaring. (Tub son — faqat 1 ga va özigagina bölinadigan son: 2, 5, 97 tub; 1, 4, 100 tub emas.)"], "inp": "Birinçi qatorda T (1 ≤ T ≤ 100) — testlar soni. Keyingi T qatorda X va Y (1 ≤ X, Y ≤ 10⁹).", "outp": "Har bir test uçun alohida qatorda YES yoki NO."}, {"key": "B", "name": "Çiroyli naqş", "lvl": "B", "samples": 1, "txt": ["Muhammadamin naqş çizişga qiziqadi. Faqat oq yoki qora kvadratçalardan iborat N × M ölçamli naqşda hec bir qatorda hamda hec bir ustunda ketma-ket 3 ta bir xil rangli kvadratça uçramasa, bunday naqşni u çiroyli deb hisoblaydi, va naqşning çiroylilik darajasi undagi qora kvadratçalar soniga teng.", "Muhammadaminda ölçami A × B millimetr bölgan qoğoz bor. U şu qoğozga naqş çizmoqçi. Unga çizişi mumkin bölgan naqşning çiroylilik darajasi maksimal neçça bölişini aniqlang."], "inp": "Birinçi qatorda T (1 ≤ T ≤ 10⁵) — testlar soni. Keyingi T qatorda ikkitadan butun son A va B (1 ≤ A, B ≤ 10⁹).", "outp": "Har bir test uçun alohida qatorda bitta butun son — maksimal çiroylilik darajasi."}, {"key": "C", "name": "Aniq 4 ta", "lvl": "C", "samples": 2, "txt": ["Sizga N soni berilgan. [1, N] oraliqdan tasodifiy tanlangan bitta sonning böluvçilari soni aniq 4 ta bölişi ehtimolini toping.", "Ehtimol p/q kasr körinişida bölgani uçun, javob sifatida p · q^(998244351) ni 998244353 ga bölgandagi qoldiqni çiqaring (p/q ning 998244353 moduli böyiça qiymati)."], "inp": "N (1 ≤ N ≤ 10⁵).", "outp": "Masala javobi — bitta butun son."}, {"key": "D", "name": "Piranalar migratsiyasi", "lvl": "D", "samples": 1, "txt": ["Amazonka daryosining bir bölagida N ta pirani istiqomat qiladi. Har bir i-piraniyaning vazni W[i] ga teng. Bahor faslida ular yangi hududlarga köçiş uçun katta migratsiya tödalarini şakllantiradi.", "Faqat migratsiya vaqtida, agar töda içida eng oğir va eng yengil piranilar vaznlari orasidagi farq K dan oşsa, kiçik (kuçsiz) piranilar xavf ostida qoladi. Şuning uçun har bir pirani özi qatnaşadigan eng katta xavfsiz tödaning kattaligini bilmoqçi: i-pirani qatnaşadigan, va undagi eng oğir hamda eng yengil piranilar vaznlari farqi eng köpi bilan K ga teng bölgan maksimal tödaning ölçamini toping.", "Har bir i uçun i-pirani xavfsiz ravişda qöşila oladigan maksimal töda kattaligini aniqlang."], "inp": "Birinçi qatorda N va K (1 ≤ N ≤ 2·10⁵, 0 ≤ K ≤ 10⁹). Ikkinçi qatorda N ta butun son W[i] (1 ≤ W[i] ≤ 10⁹) — piranilarning vazni.", "outp": "N ta son çiqaring: har bir i uçun u qatnaşa oladigan eng katta xavfsiz töda ölçami."}, {"key": "E", "name": "Imperatorning vasiyati", "lvl": "E", "samples": 2, "txt": ["Imperator taşkil qilgan imperiyada N ta şahar bor, şaharlar 1 dan N gaça sonlar bilan belgilangan va bu şaharlarni boğlab turadigan N ta yöl bor. Bu yöllar orqali barça şaharlar özaro boğlanganligi kafolatlanadi. i-şaharda A[i] ta aholi (soliq tölovçi) istiqomat qiladi.", "Imperatorning ikki öğli bor. Imperator vafotidan söng öğillari taxt uçun talaşmasin degan maqsadda vasiyat yozib qöydi: öğillarim imperiyani kelişgan holda ikkiga bölib olsin, ya'ni ayrim şaharlar katta öğilga, qolgani esa kiçik öğilga bölsin. Şaharlarni şunday taqsimlangki, har biringiz özingizga ajratilgan ixtiyoriy bir şahardan boşqa bir şaharingizga özingizga tegişli şaharlar orasidagi yöllar orqali bora olişingiz kerak. Bölinişda ikkalangizning umumiy soliq tölovçilar soni orasidagi farq mumkin qadar kiçik bölsin.", "Imperatorning öğillari şaharlarni otasining vasiyati asosida bölib olişsa, öğillarning soliq tölovçilari soni orasidagi farq eng kamida neçça bölişini aniqlang."], "inp": "Birinçi qatorda N (3 ≤ N ≤ 10⁵). Ikkinçi qatorda N ta butun son A[i] (1 ≤ A[i] ≤ 10⁹). Keyingi N ta qatorda ikkitadan butun son — navbatdagi yöl qaysi ikki şaharni boğlab turişi.", "outp": "Soliq tölovçilari soni orasidagi eng kam farqni çiqaring."}], "3": [{"key": "A", "name": "Tangalar öyini", "lvl": "A", "samples": 1, "txt": ["Durdona yaqinda sport dasturlaşdan kempda qatnaşdi. Kempdagi mavzularni yaxşi tuşunmaganligi sababli u juda zerikib qoldi va bitta öyin öylab topdi (yaxşiyamki u özi bilan 3 ta tanga olib kelgan). Dastlab u 3 ta tangasini sonlar öqiga a < b < c nuqtalarga joylaştiradi.", "Öyinning qoidasi şunday: u bitta harakatda eng çapdagi yoki eng öngdagi tangani olib, qolgan ikkita tanga orasidagi (ularning joyiga tuşmaydigan) ixtiyoriy butun nuqtaga joylaştira oladi. Endi u optimal harakat qilsa, uning öyini eng köpi bilan neçta harakatgaça davom etişini bilmoqçi. Durdonaga buni aniqlaşda yordam bering."], "inp": "Yagona qatorda 3 ta butun son a, b, c (0 < a < b < c < 100) — Durdona dastlab tangalarini joylaştirgan nuqtalar.", "outp": "Durdona optimal öynasa eng köpi bilan neçta harakatni amalga oşira olişini çiqaring."}, {"key": "B", "name": "Sirli xabar va «tez-tez uçraydigan sonlar» qoidasi", "lvl": "B", "samples": 1, "txt": ["Anvar — mohir kod buzuvçi. U har qanday şifrlangan xabarni sonlarning tez-tez uçraşini topiş orqali yeçiş mumkin deb öylaydi. U duşman xabarini qölga kiritdi. Xabar N ta butun sondan iborat, har bir son C dan kiçik yoki teng.", "Anvarning fikriça, xabarni «frequency analysis» qilmoq degani — sonlarni köp uçraydiganidan kam uçraydiganiga qarab tartiblaş. Aniqroq: xabarni şunday tartiblangki, har qanday ikkita X va Y soni uçun: (1) agar X soni original xabarda Y dan köp uçragan bölsa, X oldin keladi; (2) agar X va Y bir xil marta uçragan bölsa, qaysi biri original xabarda dastlab kelsa, şunisi oldin turadi."], "inp": "Birinçi qatorda N va C (1 ≤ N ≤ 1000, 1 ≤ C ≤ 10⁹). Ikkinçi qatorda N ta butun son.", "outp": "Xabarni Anvar usulida tartiblab çiqaring."}, {"key": "C", "name": "Xor sequence", "lvl": "C", "samples": 1, "txt": ["A[1] = 1, A[2] = 1, i > 2 bölsa A[i] = |A[i−1] − A[i−2]| ⊕ (A[i−1] + A[i−2]). Bu yerda ⊕ bitwise XOR amalini bildiradi. Şu şartlar asosida qurilgan A ketma-ketlik mavjud.", "Sizning vazifangiz berilgan L, R va M sonlari uçun (A[L] + A[L+1] + … + A[R]) mod M ning qiymatini, ya'ni ketma-ketlikning L-tartibdan R-tartibgaça bölgan elementlari yiğindisini M ga bölgandagi qoldiqni aniqlaşdan iborat."], "inp": "Birinçi qatorda T (1 ≤ T ≤ 2·10⁵) — testlar soni. Keyingi T qatorda uçtadan butun son L (1 ≤ L ≤ 10⁹), R (L ≤ R ≤ 10⁹) va M (1 ≤ M ≤ 10⁹). Kiritilgan M tub son ekanligi kafolatlanadi.", "outp": "Har bir test uçun alohida qatorda bitta butun son."}, {"key": "D", "name": "Eng kiçik qiymat", "lvl": "D", "samples": 1, "txt": ["Sizga a soni berilgan. Şunday natural b soni borki, k = (a · b) / (a + b) qiymat ham natural bölsin. Sizning vazifangiz b ning eng kiçik qiymatini topiş."], "inp": "Birinçi qatorda T (1 ≤ T ≤ 10⁴) — testlar soni. Keyingi T qatorda bittadan a (2 ≤ a ≤ 2·10⁹).", "outp": "Har bir test uçun alohida qatorda masala javobini çiqaring."}, {"key": "E", "name": "Sirli örmon va xavfsiz yöl", "lvl": "E", "samples": 1, "txt": ["Bir sirli qahramon örmon böylab xavfli hududdan qoçmoqda. Örmonning ba'zi katakçalarida daraxtlar bor. Qahramonning maqsadi özining xavfsiz uyi joylaşgan katakçaga yetib boriş, şu bilan birga daraxtlardan iloji boriça uzoq yöl tanlaş.", "Örmonni N × M katakçali panjara bilan ifodalaş mumkin: '.' — böş katakça, '+' — daraxt, S — qahramonning hozirgi joyi, U — uy. Qahramon har bir qadamda shimol, janub, sharq yoki ğarbga harakat qilişi mumkin, hatto daraxt ustidan ham ötişi mumkin. Agar qahramon (R, C) katakçada, daraxt (A, B) katakçada bölsa, ular orasidagi masofa |R − A| + |C − B|.", "Qahramon uçun eng xavfsiz yöl deganda, yöl davomida daraxtlardan eng yaqin masofa maksimal bölgan yöl nazarda tutiladi (yöl boşlanğiç va oxirgi katakçalarni ham öz içiga oladi)."], "inp": "Birinçi qatorda ikkita butun son N, M (1 ≤ N, M ≤ 500) — panjaraning ölçamlari. Keyingi N ta qatorda M tadan belgi: «.», «+», «S», «U». Panjarada aniq bitta S, bitta U va kamida bitta «+» mavjud.", "outp": "Qahramon eng xavfsiz yöldan foydalansa, daraxtlargaça bölgan eng qisqa masofani çiqaring."}]};
+var MAP = {"9":"1","10":"2","11":"3"};
+var PROBS = [];
+
+var TESTS = null, ST = null, judge = null, busy = false, cur = 1;
+var $ = function(id){return document.getElementById(id)};
+var KEY = "dast_state_v2";
+
+function load(){ try{ return JSON.parse(localStorage.getItem(KEY)); }catch(e){ return null; } }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(ST)); }catch(e){} }
+
+/* ---------- Python işçisi ---------- */
+var WORKER_SRC = [
+"var py=null;",
+"self.onmessage=async function(e){var m=e.data;",
+" try{",
+"  if(m.cmd==='init'){importScripts(m.base+'pyodide/pyodide.js');",
+"   py=await loadPyodide({indexURL:m.base+'pyodide/'});",
+"   py.runPython(\"import sys,io,traceback\\ndef run_user(code,inp):\\n    sys.stdin=io.StringIO(inp)\\n    out=io.StringIO()\\n    old=sys.stdout\\n    sys.stdout=out\\n    err=''\\n    try:\\n        g={'__name__':'__main__'}\\n        exec(compile(code,'main.py','exec'),g)\\n    except SystemExit:\\n        pass\\n    except BaseException:\\n        err=traceback.format_exc(limit=4)\\n    finally:\\n        sys.stdout=old\\n    return [out.getvalue(),err]\");",
+"   self.postMessage({ready:true});return;}",
+"  if(m.cmd==='run'){py.globals.set('_code',m.code);py.globals.set('_inp',m.input);",
+"   var t0=performance.now();var r=py.runPython('run_user(_code,_inp)').toJs();var t1=performance.now();",
+"   self.postMessage({id:m.id,out:r[0],err:r[1],ms:Math.round(t1-t0)});}",
+" }catch(ex){self.postMessage({id:m.id,out:'',err:String(ex),ms:0,fatal:true});}",
+"};"
+].join("\n");
+
+function Judge(){ this.w = null; this.ready = null; }
+Judge.prototype.start = function(){
+  var self = this;
+  var blob = new Blob([WORKER_SRC], {type:"text/javascript"});
+  var w = new Worker(URL.createObjectURL(blob));
+  this.w = w;
+  this.ready = new Promise(function(res, rej){
+    w.onmessage = function(e){ if(e.data.ready) res(); };
+    w.onerror = function(e){ rej(new Error("Python yuklanmadi")); };
+    w.postMessage({cmd:"init", base:BASE});
+  });
+  return this.ready;
+};
+Judge.prototype.run = async function(code, input){
+  if(!this.w) await this.start();
+  await this.ready;
+  var self = this, w = this.w, id = Math.random();
+  return new Promise(function(resolve){
+    var done = false;
+    var timer = setTimeout(function(){
+      if(done) return; done = true;
+      try{ w.terminate(); }catch(e){}
+      self.w = null; self.ready = null;
+      resolve({v:"TL", ms:TL_MS});
+    }, TL_MS);
+    w.onmessage = function(e){
+      if(done || e.data.id !== id) return;
+      done = true; clearTimeout(timer);
+      resolve({v:e.data.err ? "RE" : "OK", out:e.data.out, err:e.data.err, ms:e.data.ms});
+    };
+    w.postMessage({cmd:"run", id:id, code:code, input:input});
+  });
+};
+function same(a, b){
+  var x = a.split(/\s+/).filter(Boolean), y = b.split(/\s+/).filter(Boolean);
+  if(x.length !== y.length) return false;
+  for(var i = 0; i < x.length; i++) if(x[i] !== y[i]) return false;
+  return true;
+}
+function judgeOne(code, t){
+  return judge.run(code, t[0] + "\n").then(function(r){
+    if(r.v === "OK") r.v = same(r.out, t[1]) ? "OK" : "WA";
+    return r;
+  });
+}
+
+/* ---------- Interfeys ---------- */
+function esc(s){ return String(s).replace(/[&<>]/g, function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;"}[c]}); }
+function fmt(s){ var h = Math.floor(s/3600), m = Math.floor(s%3600/60), x = s%60; return [h,m,x].map(function(v){return String(v).padStart(2,"0")}).join(":"); }
+
+function renderTabs(){
+  var h = "";
+  PROBS.forEach(function(p){
+    var sc = ST.scores[p.id];
+    var cl = sc === 100 ? "full" : (sc > 0 ? "part" : "");
+    h += '<div class="tab'+(p.id===cur?' act':'')+'" data-id="'+p.id+'"><span><b>'+p.lvl+'</b>'+esc(p.name)+'</span><span class="sc '+cl+'">'+(sc==null?"—":sc)+'</span></div>';
+  });
+  $("tabs").innerHTML = h;
+  Array.prototype.forEach.call(document.querySelectorAll(".tab"), function(el){
+    el.onclick = function(){ if(busy) return; saveCode(); cur = +el.getAttribute("data-id"); showProb(); };
+  });
+}
+function saveCode(){ ST.codes[cur] = $("code").value; save(); }
+function showProb(){
+  var p = PROBS[cur-1];
+  var h = '<h2>'+p.lvl+'. '+esc(p.name)+'</h2><div class="meta">Vaqt: 4 s · Python 3</div>';
+  p.txt.forEach(function(t){ h += '<p>'+esc(t)+'</p>'; });
+  h += '<h4>Kiriş maʼlumotlari</h4><p>'+esc(p.inp)+'</p><h4>Çiqiş maʼlumotlari</h4><p>'+esc(p.outp)+'</p><h4>Namunalar</h4>';
+  for(var i = 0; i < p.samples; i++){
+    var t = TESTS[p.key][i];
+    h += '<div class="samp"><div><b>Kiriş</b><pre class="io">'+esc(t[0])+'</pre></div><div><b>Çiqiş</b><pre class="io">'+esc(t[1])+'</pre></div></div>';
+  }
+  $("stmt").innerHTML = h;
+  $("code").value = ST.codes[cur] != null ? ST.codes[cur] : "# Python 3\n";
+  $("out").innerHTML = "";
+  renderTabs(); renderRes();
+}
+function renderRes(){
+  var h = "<tr><th>Masala</th><th>Eng yaxşi natija</th><th>Yuborişlar</th></tr>", tot = 0;
+  PROBS.forEach(function(p){
+    var sc = ST.scores[p.id] || 0; tot += sc;
+    var n = ST.subs.filter(function(s){return s.p === p.id}).length;
+    h += "<tr><td>"+p.lvl+". "+esc(p.name)+"</td><td>"+(ST.scores[p.id]==null?"—":sc)+"</td><td>"+n+"</td></tr>";
+  });
+  h += "<tr><th>Jami</th><th>"+tot+" / "+(PROBS.length*100)+"</th><th></th></tr>";
+  $("resTable").innerHTML = h;
+  return tot;
+}
+function timeLeft(){ return Math.max(0, Math.round((ST.end - Date.now())/1000)); }
+function tick(){
+  var s = timeLeft();
+  $("timer").textContent = fmt(s);
+  if(s <= 0){ $("subBtn").disabled = true; $("runBtn").disabled = true; $("timer").textContent = "Vaqt tugadi"; }
+}
+function setProg(v){ var p = $("prog"); p.style.display = v == null ? "none" : "block"; if(v != null) p.firstElementChild.style.width = Math.round(v*100) + "%"; }
+function lock(b){ busy = b; if(!b && timeLeft() <= 0) return; $("runBtn").disabled = b; $("subBtn").disabled = b; }
+
+async function runSamples(){
+  if(busy || timeLeft() <= 0) return;
+  saveCode(); lock(true);
+  var p = PROBS[cur-1], code = $("code").value, h = "";
+  $("out").innerHTML = '<div class="msg">Python yuklanmoqda / ishlamoqda…</div>';
+  for(var i = 0; i < p.samples; i++){
+    var t = TESTS[p.key][i], r = await judgeOne(code, t);
+    var lab = r.v === "OK" ? "✓ Töğri" : (r.v === "WA" ? "✗ Notöğri javob" : (r.v === "TL" ? "✗ Vaqt tugadi (4 s)" : "✗ Xato (Runtime error)"));
+    h += '<div class="msg '+(r.v==="OK"?"ok":"bad")+'"><b>Namuna '+(i+1)+':</b> '+lab+(r.ms?" · "+r.ms+" ms":"")+'</div>';
+    if(r.v !== "OK"){
+      h += '<div class="cmp"><div><b>Kiriş</b><pre>'+esc(t[0])+'</pre></div><div><b>Kutilgan</b><pre>'+esc(t[1])+'</pre></div><div><b>Sizniki</b><pre>'+esc(r.out||"")+(r.err?"\n"+esc(r.err):"")+'</pre></div></div>';
+    }
+  }
+  $("out").innerHTML = h; lock(false);
+}
+async function submit(){
+  if(busy || timeLeft() <= 0) return;
+  saveCode(); lock(true);
+  var p = PROBS[cur-1], code = $("code").value, tests = TESTS[p.key], ok = 0, chips = [], firstRE = "";
+  $("out").innerHTML = '<div class="msg">Tekşirilmoqda…</div><div class="tests" id="chips"></div>';
+  setProg(0);
+  for(var i = 0; i < tests.length; i++){
+    var r = await judgeOne(code, tests[i]);
+    if(r.v === "OK") ok++;
+    if(r.v === "RE" && !firstRE) firstRE = r.err;
+    var c = document.createElement("span");
+    c.className = "t " + r.v; c.textContent = (i+1) + (r.v==="OK"?" ✓":(r.v==="TL"?" TL":(r.v==="RE"?" RE":" ✗")));
+    $("chips").appendChild(c);
+    setProg((i+1)/tests.length);
+  }
+  setProg(null);
+  var score = Math.round(100*ok/tests.length);
+  ST.subs.push({p:p.id, score:score, ok:ok, n:tests.length, t:Date.now()});
+  if(ST.scores[p.id] == null || score > ST.scores[p.id]) ST.scores[p.id] = score;
+  save();
+  var msg = '<div class="msg '+(score===100?"ok":"bad")+'"><b>'+ok+' / '+tests.length+' test ötdi → '+score+' ball</b></div>';
+  if(firstRE) msg += '<pre class="io">'+esc(firstRE)+'</pre>';
+  var wait = $("out").querySelector(".msg"); if(wait) wait.remove();
+  $("out").insertAdjacentHTML("afterbegin", msg);
+  renderTabs(); renderRes(); lock(false);
+}
+
+function copyRes(){
+  var lines = ["Dasturlaş maşqi — natija", ST.fio + ", " + ST.cls + "-sinf, " + ST.school, ""];
+  var tot = 0;
+  PROBS.forEach(function(p){ var sc = ST.scores[p.id] || 0; tot += sc; lines.push(p.lvl + ". " + p.name + ": " + (ST.scores[p.id]==null?"—":sc)); });
+  lines.push("Jami: " + tot + " / " + PROBS.length*100, "Çiqişlar: " + ST.leaves);
+  var t = lines.join("\n");
+  (navigator.clipboard ? navigator.clipboard.writeText(t) : Promise.reject()).then(function(){ $("copyMsg").textContent = "Nusxalandi"; }, function(){ $("copyMsg").textContent = "Nusxalab bölmadi"; });
+}
+
+function enter(){
+  $("login").classList.add("hide"); $("main").classList.remove("hide");
+  $("who").textContent = ST.fio + " · " + ST.cls + "-sinf"; $("who").classList.remove("hide");
+  $("leaves").classList.remove("hide"); $("timer").parentNode.classList.remove("hide");
+  $("leaves").textContent = "Çiqişlar: " + ST.leaves; $("leaves").classList.toggle("warn", ST.leaves > 0);
+  tick(); setInterval(tick, 1000);
+  showProb();
+  judge = judge || new Judge(); judge.start();
+}
+function onLeave(){
+  if(!ST || $("main").classList.contains("hide") || timeLeft() <= 0) return;
+  ST.leaves++; save();
+  $("leaves").textContent = "Çiqişlar: " + ST.leaves; $("leaves").classList.add("warn");
+}
+
+async function init(){
+  $("code").addEventListener("keydown", function(e){
+    if(e.key === "Tab"){ e.preventDefault(); var s = this.selectionStart, en = this.selectionEnd; this.value = this.value.slice(0,s) + "    " + this.value.slice(en); this.selectionStart = this.selectionEnd = s + 4; }
+    if(e.key === "Enter" && (e.ctrlKey || e.metaKey)){ e.preventDefault(); runSamples(); }
+  });
+  $("code").addEventListener("input", function(){ ST.codes[cur] = this.value; save(); });
+  $("runBtn").onclick = runSamples; $("subBtn").onclick = submit; $("copyBtn").onclick = copyRes;
+  document.addEventListener("visibilitychange", function(){ if(document.hidden) onLeave(); });
+  var old = load();
+  if(old && old.end && old.set){ ST = old; $("fio").value = old.fio; $("cls").value = old.cls; $("school").value = old.school; $("goBtn").textContent = "Davom ettiriş"; }
+  $("goBtn").onclick = async function(){
+    var fio = $("fio").value.trim(), sch = $("school").value.trim();
+    if(fio.length < 5 || !sch){ $("loadMsg").textContent = "F.I.Ş. va maktabni kiriting."; return; }
+    if(!ST || ST.fio !== fio || ST.cls !== $("cls").value){
+      ST = {fio:fio, cls:$("cls").value, school:sch, set:MAP[$("cls").value], start:Date.now(), end:Date.now() + DURATION_MIN*60000, codes:{}, scores:{}, subs:[], leaves:0};
+    }
+    $("goBtn").disabled = true; $("loadMsg").textContent = "Testlar yuklanmoqda…";
+    try{
+      var r = await fetch("dast_tests_" + ST.set + ".json"); TESTS = await r.json();
+    }catch(e){ $("loadMsg").textContent = "Testlarni yuklab bölmadi. Sahifani yangilang."; $("goBtn").disabled = false; return; }
+    PROBS = SETS[ST.set].map(function(p, i){ p.id = i + 1; return p; });
+    save(); enter();
+  };
+}
+init();
+</script>
+</body>
+</html>
