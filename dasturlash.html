@@ -76,6 +76,7 @@ table.res td,table.res th{border:1px solid var(--line);padding:5px 9px;text-alig
   <label>Sinf</label>
   <select id="cls"><option>9</option><option>10</option><option>11</option></select>
   <label>Maktab</label><input id="school" readonly>
+  <label>PIN-kod (nazoratçidan oling)</label><input id="pin" type="password" inputmode="numeric" autocomplete="off" maxlength="12">
   <div class="bar"><button class="btn" id="goBtn">Boşlaş</button><span id="loadMsg" class="meta"></span></div>
   <ul class="rules">
     <li>Dastur standart kiriş (input) orqali öqiydi va çiqişga (print) çiqaradi.</li>
@@ -343,6 +344,13 @@ async function init(){
     var fio = $("fio").value.trim(), sch = $("school").value.trim();
     if(!fio || !sch){ $("loadMsg").textContent = "Roʻyxatdan özingizni tanlang."; return; }
     if(!ST || ST.fio !== fio || ST.cls !== $("cls").value){
+      var pin = $("pin").value.trim();
+      if(!pin){ $("loadMsg").textContent = "PIN-kodni kiriting."; return; }
+      $("goBtn").disabled = true; $("loadMsg").textContent = "PIN tekşirilmoqda…";
+      try{
+        var pr = await fetch(GAS + "?dastpin=" + encodeURIComponent(pin)); var pj = await pr.json();
+        if(!pj.ok){ $("loadMsg").textContent = "PIN xato yoki mashq yopiq."; $("goBtn").disabled = false; return; }
+      }catch(e){ $("loadMsg").textContent = "Aloqa xatosi. Qayta urining."; $("goBtn").disabled = false; return; }
       ST = {fio:fio, cls:$("cls").value, school:sch, set:MAP[$("cls").value], start:Date.now(), end:Date.now() + DURATION_MIN*60000, codes:{}, scores:{}, subs:[], leaves:0};
     }
     $("goBtn").disabled = true; $("loadMsg").textContent = "Testlar yuklanmoqda…";
