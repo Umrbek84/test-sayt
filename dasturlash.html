@@ -102,7 +102,7 @@ table.res td,table.res th{border:1px solid var(--line);padding:5px 9px;text-alig
     <div class="card">
       <h4 style="margin-top:0">Natijalar</h4>
       <table class="res" id="resTable"></table>
-      <div class="bar"><button class="btn sec" id="copyBtn">Natijani nusxalaş</button><span class="meta" id="copyMsg"></span></div>
+      <div class="bar"><button class="btn sec" id="copyBtn">Natijani nusxalaş</button><button class="btn" id="finBtn" style="margin-left:8px">Işni yakunlaş</button><span class="meta" id="copyMsg"></span></div>
     </div>
   </div>
 </div>
@@ -244,7 +244,7 @@ function tick(){
   var s = timeLeft();
   $("timer").textContent = fmt(s);
   if(s <= 0 && !ST.fin){ ST.fin = true; save(); report(null, true); }
-  if(s <= 0){ $("subBtn").disabled = true; $("runBtn").disabled = true; $("timer").textContent = "Vaqt tugadi"; }
+  if(s <= 0){ $("subBtn").disabled = true; $("runBtn").disabled = true; $("timer").textContent = "Vaqt tugadi"; $("finBtn").disabled = true; }
 }
 function setProg(v){ var p = $("prog"); p.style.display = v == null ? "none" : "block"; if(v != null) p.firstElementChild.style.width = Math.round(v*100) + "%"; }
 function lock(b){ busy = b; if(!b && timeLeft() <= 0) return; $("runBtn").disabled = b; $("subBtn").disabled = b; }
@@ -292,6 +292,11 @@ async function submit(){
   report({problem:p.key, score:score, passed:ok+'/'+tests.length, code:code});
 }
 
+function finish(){
+  if(!ST || ST.fin || busy) return;
+  if(!confirm("Işni yakunlaysizmi? Yakunlaşdan keyin yeni yuboriş mumkin bölmaydi. Natijalar nazoratçiga yuboriladi.")) return;
+  ST.end = Date.now(); ST.fin = true; save(); report(null, true); tick();
+}
 function copyRes(){
   var lines = ["Dasturlaş maşqi — natija", ST.fio + ", " + ST.cls + "-sinf, " + ST.school, ""];
   var tot = 0;
@@ -323,7 +328,7 @@ async function init(){
     if(e.key === "Enter" && (e.ctrlKey || e.metaKey)){ e.preventDefault(); runSamples(); }
   });
   $("code").addEventListener("input", function(){ ST.codes[cur] = this.value; save(); });
-  $("runBtn").onclick = runSamples; $("subBtn").onclick = submit; $("copyBtn").onclick = copyRes;
+  $("runBtn").onclick = runSamples; $("subBtn").onclick = submit; $("copyBtn").onclick = copyRes; $("finBtn").onclick = finish;
   document.addEventListener("visibilitychange", function(){ if(document.hidden) onLeave(); });
   function fillFio(){
     var c = $("cls").value, s = $("fio"); s.innerHTML = "";
