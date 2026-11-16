@@ -242,16 +242,15 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
     <div class="sec-head"><h2>Natijalar</h2><p>Test topşirgan ğoliblar natijalari — topşiriş tartibida.</p></div>
     <div class="res-stats">
       <div class="res-stat"><b id="rsCnt">–</b><span>Topşirganlar</span></div>
-      <div class="res-stat"><b id="rsAvg">–</b><span>Örtaça ball (50 dan)</span></div>
-      <div class="res-stat"><b id="rsTop">–</b><span>Örtaça farq (tuman bilan)</span></div>
+      <div class="res-stat"><b id="rsAvg">–</b><span>Örtaça natija (%)</span></div>
     </div>
     <div class="res-tools">
       <input id="rQ" type="search" placeholder="F.I.Ş. yoki maktab böyiça qidiriş...">
       <select id="rFan"><option value="">Barça fanlar</option></select>
       <select id="rSinf"><option value="">Barça sinflar</option><option>9</option><option>10</option><option>11</option></select>
-      <select id="rSort"><option value="new">Topşiriş tartibi</option><option value="top">Ball böyiça (yuqori)</option><option value="dn">Eng kamayganlar</option><option value="up">Eng ösganlar</option></select>
+      <select id="rSort"><option value="new">Topşiriş tartibi</option><option value="top">Ball böyiça (yuqori)</option></select>
     </div>
-    <div class="res-head"><span>№</span><span>F.I.Ş.</span><span>Maktab</span><span>Fan</span><span>Ball / Tuman</span><span>Sana</span></div>
+    <div class="res-head"><span>№</span><span>F.I.Ş.</span><span>Maktab</span><span>Fan</span><span>Ball</span><span>Sana</span></div>
     <div id="rList"><div class="res-msg">Natijalar yuklanmoqda...</div></div>
     <button class="res-more" id="rMore" style="display:none">Yana körsatiş</button>
   </div>
@@ -329,17 +328,16 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
       var a=all.filter(function(r){
         return (!fan||r.fan===fan)&&(!sf||r.sinf===sf)&&(!q||(r.name+' '+r.school).toLowerCase().indexOf(q)>-1);
       });
-      var dv=function(r){return r.tuman==null?(so==='dn'?1e9:-1e9):r.ball-r.tuman};
-      a.sort(so==='top'?function(x,y){return y.ball-x.ball||x.t-y.t}:so==='dn'?function(x,y){return dv(x)-dv(y)}:so==='up'?function(x,y){return dv(y)-dv(x)}:function(x,y){return x.t-y.t});
+            a.sort(so==='top'?function(x,y){return y.ball/y.max-x.ball/x.max||x.t-y.t}:function(x,y){return x.t-y.t});
       var box=$('rList');
       if(!a.length){box.innerHTML='<div class="res-msg">Natija topilmadi.</div>';$('rMore').style.display='none';return}
       box.innerHTML=a.slice(0,shown).map(function(r,i){
-        var p=Math.min(100,r.ball/MAXB*100);
+        var p=Math.min(100,r.ball/r.max*100);
         return '<div class="res-row"><div class="res-n">'+(i+1)+'</div>'+
           '<div><div class="res-name">'+esc(r.name)+'</div></div>'+
           '<div class="c-school">'+esc(r.school)+'</div>'+
           '<div class="c-fan">'+esc(r.fan)+' — '+esc(r.sinf)+'-sinf</div>'+
-          '<div class="res-ball"><b>'+fmt(r.ball)+' ball</b>'+(r.tuman!=null?(function(){var d=r.ball-r.tuman,c=d>0.04?'up':d<-0.04?'dn':'eq';return '<span class="dl '+c+'">'+(d>0.04?'+':d<-0.04?'−':'')+fmt(Math.abs(d))+'</span>'})():'')+'<small>'+(r.tuman!=null?'Tuman: '+fmt(r.tuman):Math.round(p)+'%')+'</small><div class="bar"><i style="width:'+p+'%"></i></div></div>'+
+          '<div class="res-ball"><b>'+fmt(r.ball)+' ball</b><small>'+fmt(r.ball)+' / '+r.max+' ('+Math.round(p)+'%)</small><div class="bar"><i style="width:'+p+'%"></i></div></div>'+
           '<div class="res-date c-date">'+esc(r.date)+'</div></div>';
       }).join('');
       $('rMore').style.display=a.length>shown?'block':'none';
@@ -347,16 +345,14 @@ footer h5{font-family:'Times New Roman',Times,serif;font-size:16px;color:#fff;ma
     function stats(){
       var n=all.length;
       $('rsCnt').textContent=n;
-      $('rsAvg').textContent=n?fmt(all.reduce(function(s,r){return s+r.ball},0)/n):'–';
-      var wd=all.filter(function(r){return r.tuman!=null});
-      if(wd.length){var m=wd.reduce(function(s,r){return s+r.ball-r.tuman},0)/wd.length;$('rsTop').textContent=(m>0.04?'+':m<-0.04?'−':'')+fmt(Math.abs(m));$('rsTop').style.color=m>0.04?'#17794a':m<-0.04?'#b32525':'';}else $('rsTop').textContent='–';
+      $('rsAvg').textContent=n?Math.round(all.reduce(function(s,r){return s+Math.min(100,r.ball/r.max*100)},0)/n)+'%':'–';
       var fans={};all.forEach(function(r){if(r.fan)fans[r.fan]=1});
       $('rFan').innerHTML='<option value="">Barça fanlar</option>'+Object.keys(fans).sort().map(function(f){return '<option>'+esc(f)+'</option>'}).join('');
     }
     function load(){
       fetch(SCRIPT_URL+'?results=1').then(function(r){return r.json()}).then(function(j){
         if(!j.success)throw new Error(j.msg||'xato');
-        all=j.data.map(function(r){r.ball=Number(r.ball)||0;r.tuman=(r.tuman==null||r.tuman==='')?null:Number(r.tuman);r.t=ts(r.date);return r});
+        all=j.data.map(function(r){r.ball=Number(r.ball)||0;r.max=Number(r.max)||MAXB;r.t=ts(r.date);return r});
         stats();render();
       }).catch(function(){
         $('rList').innerHTML='<div class="res-msg">Natijalarni yuklab bölmadi. Keyinroq urinib köring.</div>';
